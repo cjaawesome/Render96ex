@@ -52,11 +52,12 @@ struct Character charmap[356] = {
     {"{00211}", {120, NULL}},
     {"{00218}", {121, NULL}},
     {"{00241}", {122, NULL}},
-    {"{00209}", {123, NULL}},
     {"{00252}", {124, NULL}},
     {"{00220}", {125, NULL}},
     {"{00191}", {126, NULL}},
-    {"{00161}", {127, NULL}}
+    {"{00161}", {127, NULL}},
+        {"{", {123, NULL}}
+
 };
 
 struct Character getCharacter(char* ch){
@@ -118,17 +119,27 @@ u8 * getTranslatedText(char * txt){
             tmpSpecialChar[6] = txt[cid + 6];
 
             struct Character ctm = getCharacter(tmpSpecialChar);
-
-            if(ctm.txt != NULL){
-                shiftArr += 5;
-                cid += 5;
-                for(int cl = 0; cl < 2; cl++){
-                    if(ctm.value[cl] != NULL){
+            if (ctm.txt == "{") {
+                for (int cl = 0; cl < 2; cl++) {
+                    if (ctm.value[cl] != NULL) {
                         tmp[cid - shiftArr + cl] = ctm.value[cl];
-                        shiftArr-=cl;
+                        shiftArr -= cl;
                     }
                 }
-                memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));
+            }
+
+            else {
+                if (ctm.txt != NULL) {
+                    shiftArr += 5;
+                    cid += 5;
+                    for (int cl = 0; cl < 2; cl++) {
+                        if (ctm.value[cl] != NULL) {
+                            tmp[cid - shiftArr + cl] = ctm.value[cl];
+                            shiftArr -= cl;
+                        }
+                    }
+                    memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));
+                }
             }
         } else {
             char findTxt[1] = {ch};

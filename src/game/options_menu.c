@@ -463,7 +463,18 @@ static void optmenu_opt_change(struct Option *opt, s32 val) {
 static inline s16 get_hudstr_centered_x(const s16 sx, const u8 *str) {
     const u8 *chr = str;
     s16 len = 0;
-    while (*chr != GLOBAR_CHAR_TERMINATOR) ++chr, ++len;
+    while (*chr != GLOBAR_CHAR_TERMINATOR) {
+       
+        if (*chr == '{') {
+            chr += 7;
+            len++;
+        }else
+        {
+             ++chr;
+             ++len;
+        }
+        
+    }
     return sx - len * 6; // stride is 12
 }
 

@@ -40,7 +40,7 @@
 #endif
 
 #include "text/text-loader.h"
-
+char *exe_location;
 OSMesg D_80339BEC;
 OSMesgQueue gSIEventMesgQueue;
 
@@ -183,7 +183,7 @@ void main_func(char *argv[]) {
     const char *userpath = gCLIOpts.SavePath[0] ? gCLIOpts.SavePath : sys_user_path();    
     fs_init(sys_ropaths, gamedir, userpath);
     configfile_load(configfile_name());
-
+    exe_location = argv[0];
     alloc_dialog_pool(argv[0], gamedir);
 
     if (gCLIOpts.FullScreen == 1)

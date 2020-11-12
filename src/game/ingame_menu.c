@@ -30,6 +30,8 @@
 #endif
 
 #include "text/text-loader.h"
+#include <stdio.h>
+#include <string.h>
 
 u16 gDialogColorFadeTimer;
 s8 gLastDialogLineNum;
@@ -43,6 +45,11 @@ s16 gCutsceneMsgXOffset;
 s16 gCutsceneMsgYOffset;
 s8 gRedCoinsCollected;
 
+struct unifont_address_node {
+    char *str;
+    struct unifont_address_node *next;
+};
+struct unifont_address_node *unifont_head = NULL;
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
 
@@ -251,6 +258,66 @@ void render_generic_char(u8 c) {
 #endif
 }
 
+/* This function returns the address for the unifont text string used for texture addresses or creates a new string and adds it to the linked list.*/
+char *get_unifont_address(char *str) {
+    if (unifont_head) // check if list is empty
+    {
+        struct unifont_address_node *cursor = unifont_head;
+        while (strcmp(str, cursor->str)) {
+          
+            if (!cursor->next) //check if at end of list and add string to list 
+            {
+               cursor->next= malloc(sizeof(struct unifont_address_node));
+               cursor->next->str = strdup(str);
+               cursor->next->next = NULL;
+            }
+            cursor = cursor->next;
+        }
+        return cursor->str;
+    }
+    else
+    {
+        unifont_head = malloc(sizeof(struct unifont_address_node));
+        unifont_head->str = strdup(str);
+        unifont_head->next = NULL;
+        return unifont_head->str;
+    }
+}
+
+void render_unicode_char(u32 codepoint){
+static const Vtx vertex_ia8_char[] = {
+    {{{     0,      0,      0}, 0, {     0,    256}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,     16,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     16,      0}, 0, {   480,    256}, {0xff, 0xff, 0xff, 0xff}}},
+
+};
+    void *packedTexture;
+    char buffer[27];
+    sprintf(buffer,"textures/unicode/main.%04X",codepoint);
+    packedTexture = get_unifont_address(buffer);
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, VIRTUAL_TO_PHYSICAL(packedTexture));
+    gDPSetTile(gDisplayListHead++,G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 4, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 4, G_TX_NOLOD);
+    gDPLoadSync(gDisplayListHead++);
+    gDPLoadBlock(gDisplayListHead++,G_TX_LOADTILE, 0, 0, (16*8), CALC_DXT(8, G_IM_SIZ_16b_BYTES));
+    gDPSetTile(gDisplayListHead++,G_IM_FMT_IA, G_IM_SIZ_16b, 1, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP | G_TX_NOMIRROR, 4, G_TX_NOLOD, G_TX_CLAMP | G_TX_NOMIRROR, 4, G_TX_NOLOD);
+    gDPSetTileSize(gDisplayListHead++,0, 0, 0, (16-1) << G_TEXTURE_IMAGE_FRAC, (8-1) << G_TEXTURE_IMAGE_FRAC);
+    gSPVertex(gDisplayListHead++,vertex_ia8_char, 4, 0);
+    gSP2Triangles(gDisplayListHead++, 0,  1,  2, 0x0, 0,  2,  3, 0x0);
+    }
+    
+u32 str_to_codepoint(u8 *str) {
+    str++;
+    u32 codepoint = 0;
+    for (char i = 0; i < 4; i++) {
+        codepoint += *str;
+        codepoint *= 10;
+        str++;
+    }
+    codepoint += *str;
+    return codepoint;
+}
 #ifdef VERSION_EU
 static void alloc_ia4_tex_from_i1(u8 *out, u8 *in, s16 width, s16 height) {
     u32 size = (u32) width * (u32) height;
@@ -467,6 +534,14 @@ void print_generic_string(s16 x, s16 y, const u8 *str) {
 #endif
 #endif
                 break; // ? needed to match
+            case '{':
+                render_unicode_char(str_to_codepoint(&str[strPos]));
+                create_dl_translation_matrix(MENU_MTX_NOPUSH, 7.5f, 0.0f, 0.0f);
+                strPos += 6;
+
+        
+                break;
+
             default:
 #ifdef VERSION_EU
                 render_generic_char_at_pos(xCoord, yCoord, str[strPos]);
@@ -566,11 +641,22 @@ void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
 #endif
             gDPPipeSync(gDisplayListHead++);
 
-            if (hudLUT == HUD_LUT_JPMENU)
-                gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT1[str[strPos]]);
+            if (str[strPos] == '{') {
+                void *packedTexture;
+                char buffer[27];
+                sprintf(buffer, "textures/unicode/hud.%04X", str_to_codepoint(&str[strPos]));
+                packedTexture = get_unifont_address(buffer);
+                gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, packedTexture);
+                ;
+                strPos += 6;
 
-            if (hudLUT == HUD_LUT_GLOBAL)
-                gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT2[str[strPos]]);
+            } else {
+                if (hudLUT == HUD_LUT_JPMENU)
+                    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT1[str[strPos]]);
+
+                if (hudLUT == HUD_LUT_GLOBAL)
+                    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT2[str[strPos]]);
+            }
 
             gSPDisplayList(gDisplayListHead++, dl_rgba16_load_tex_block);
             gSPTextureRectangle(gDisplayListHead++, curX << 2, curY << 2, (curX + 16) << 2,
@@ -637,6 +723,23 @@ void print_menu_generic_string(s16 x, s16 y, const u8 *str) {
             case DIALOG_CHAR_SPACE:
                 curX += 4;
                 break;
+            case '{':;
+                void *packedTexture;
+                char buffer[27];
+                sprintf(buffer, "textures/unicode/menu.%04X", str_to_codepoint(&str[strPos]));
+                packedTexture = get_unifont_address(buffer);
+                gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 1,
+                                   packedTexture);
+                gDPLoadSync(gDisplayListHead++);
+                gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, 8 * 8 - 1,
+                             CALC_DXT(8, G_IM_SIZ_8b_BYTES));
+                gSPTextureRectangle(gDisplayListHead++, curX << 2, curY << 2, (curX + 8) << 2,
+                                    (curY + 8) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+
+                strPos += 6;
+                curX += 7;
+                break;
+
             default:
                 gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 1, fontLUT[str[strPos]]);
                 gDPLoadSync(gDisplayListHead++);
@@ -758,8 +861,13 @@ s16 get_str_x_pos_from_center(s16 centerPos, u8 *str, UNUSED f32 scale) {
     f32 spacesWidth = 0.0f;
 
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
-        spacesWidth += gDialogCharWidths[str[strPos]];
-        strPos++;
+        if (str[strPos] == '{') {
+            spacesWidth += 7;
+            strPos += 7;
+        } else {
+            spacesWidth += gDialogCharWidths[str[strPos]];
+            strPos++;
+        }
     }
     // return the x position of where the string starts as half the string's
     // length from the position of the provided center.
@@ -1366,7 +1474,22 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                 gDialogX += gDialogCharWidths[0xF6];
                 break;
 #endif
-            default: // any other character
+            case '{':
+                if (lineNum >= lowerBound && lineNum <= lowerBound + linesPerBox) {
+                    if (linePos || xMatrix != 1) {
+                        create_dl_translation_matrix(
+                            MENU_MTX_NOPUSH,
+                            (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * (xMatrix - 1)), 0, 0);
+                    }
+
+                    render_unicode_char(str_to_codepoint(&str[strIdx]));
+                    create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(8), 0, 0);
+                    xMatrix = 1;
+                    linePos ++;
+                    strIdx += 6;}
+                    break;
+
+                    default: // any other character
 #if defined(VERSION_JP) || defined(VERSION_SH)
                 if (linePos != 0) {
                     create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix * 10, 0, 0);
@@ -1400,7 +1523,7 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                 }
                 gDialogX += gDialogCharWidths[strChar];
 #endif
-        }
+                }
 
 #if defined(VERSION_JP) || defined(VERSION_SH)
         if (linePos == 12) {

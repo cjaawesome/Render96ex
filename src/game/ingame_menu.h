@@ -146,5 +146,8 @@ void do_cutscene_handler(void);
 void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
 s16 render_menus_and_dialogs(void);
+u32 str_to_codepoint(u8 *str);
+void render_unicode_char(u32 codepoint);
+char *get_unifont_address(char *str);
 
 #endif // INGAME_MENU_H

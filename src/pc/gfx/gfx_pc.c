@@ -25,6 +25,7 @@
 #include "../platform.h"
 #include "../configfile.h"
 #include "../fs/fs.h"
+#include "src/text/unifont_dyn.h"
 
 #define SUPPORT_CHECK(x) assert(x)
 
@@ -331,13 +332,91 @@ static inline void load_texture(const char *fullpath) {
             stbi_image_free(data); // don't need this anymore
             return;
         }
+    } else {
+        if (strncmp(fullpath, "gfx/textures/unicode/", 21) == 0) {
+
+            uint8_t rgba32_buf[16 *  16 * 4];
+            uint32_t one_x_texture[16 * 16];
+            memset(one_x_texture, 0, sizeof(one_x_texture));
+
+            if (strncmp(fullpath + 21, "main", 4) == 0) {
+                uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
+                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
+                if (get_unifont_glyph(codepoint) == NULL) {
+                    add_glyph_using_loaded_font(codepoint);
+                }
+                w = 16;
+                h = get_unifont_glyph(codepoint)->width;
+                for (uint32_t i = 0; i < w; i++) {
+                    for (uint32_t j = 0; j < 8; j++) {
+                        char bitmask = (1 << j);
+                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
+                            one_x_texture[(j * 16) + (15 - i)] = 0xFFFFFFFF;
+                        } else {
+                            one_x_texture[(j * 16) + (15 - i)] = 0;
+                        }
+                    }
+                }
+            } else if (strncmp(fullpath + 21, "menu", 4) == 0) {
+                uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
+                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
+                if (get_unifont_glyph(codepoint) == NULL) {
+                    add_glyph_using_loaded_font(codepoint);
+                }
+                h = 16;
+                w = get_unifont_glyph(codepoint)->width+1;
+                 for (uint32_t i = 0; i < 16; i++) {
+                    for (uint32_t j = 0; j < 8; j++) {
+                        char bitmask = (1 << j);
+                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
+                            one_x_texture[(i * 9) + (8 - j)] = 0xFFFFFFFF;
+
+                        } else {
+                            one_x_texture[(i * 9) + (8 - j)] = 0;
+                        }
+                    }
+                }
+
+            } else if (strncmp(fullpath + 21, "hud", 3) == 0) {
+                uint32_t codepoint = strtol((fullpath + 25), 0x0, 16);
+                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
+                if (get_unifont_glyph(codepoint) == NULL) {
+                    add_glyph_using_loaded_font(codepoint);
+                }
+                h = 16;
+                w = get_unifont_glyph(codepoint)->width + 1;
+                for (uint32_t i = 0; i < 16; i++) {
+                    for (uint32_t j = 0; j < 8; j++) {
+                        char bitmask = (1 << j);
+                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
+                            one_x_texture[(i * 9) + (8 - j)] = 0xFFFFFFFF;
+
+                        } else {
+                            one_x_texture[(i * 9) + (8 - j)] = 0;
+                        }
+                    }
+                }
+
+            } else {
+                fprintf(stderr, "could not load unifont texture: `%s`\n", fullpath);
+                // replace with missing texture
+                gfx_rapi->upload_texture(missing_texture, MISSING_W, MISSING_H);
+                return;
+            }
+
+            for (int i = 0; i < sizeof(one_x_texture); i++) {
+                rgba32_buf[i] = (one_x_texture[i / 4] >> (8 * (i % 4))) & 0xFF;
+            }
+
+            gfx_rapi->upload_texture(rgba32_buf, w, h);
+            return;
+        }
     }
 
     fprintf(stderr, "could not load texture: `%s`\n", fullpath);
     // replace with missing texture
     gfx_rapi->upload_texture(missing_texture, MISSING_W, MISSING_H);
 }
-
 
 // this is taken straight from n64graphics
 static bool texname_to_texformat(const char *name, u8 *fmt, u8 *siz) {
@@ -1525,6 +1604,7 @@ void gfx_init(struct GfxWindowManagerAPI *wapi, struct GfxRenderingAPI *rapi, co
 void gfx_precache_textures(void) {
     // preload all textures
     fs_walk(FS_TEXTUREDIR, preload_texture, NULL, true);
+    preload_codepoints();
 }
 
 struct GfxRenderingAPI *gfx_get_current_rendering_api(void) {
