@@ -155,7 +155,7 @@ u8 *getTranslatedText(char  *txt){
             } else {
                 ctm = getCharacter(")");
                 if(ctm.txt != NULL){
-                    tmp[cid] = ctm.value[0];
+                    tmp[cid - shiftArr] = ctm.value[0];
                 }
             }
             memset(tmpIcon, 0, sizeof(tmpIcon));
@@ -189,7 +189,6 @@ u8 *getTranslatedText(char  *txt){
                             shiftArr -= cl;
                         }
                     }
-                    memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));
                 }
             }
             memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));

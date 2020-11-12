@@ -8,6 +8,16 @@
 #include "pc/cliopts.h"
 extern char *exe_location;
 
+#ifndef _MAX_FNAME
+#ifdef __APPLE__
+    #include <sys/syslimits.h>
+    #define _MAX_FNAME NAME_MAX
+#elif defined __linux__
+    #include <linux/limits.h>
+    #define _MAX_FNAME PATH_MAX
+#endif
+#endif
+
 struct unifont_glyph *unifont_glyph_head = NULL; // This should be replaced if/when this is expanded to multiple font files.
 FILE *unifont_font_file = NULL;
 
