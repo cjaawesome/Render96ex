@@ -189,7 +189,6 @@ u8 *getTranslatedText(char  *txt){
                             shiftArr -= cl;
                         }
                     }
-                    memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));
                 }
             }
             memset(tmpSpecialChar, 0, sizeof(tmpSpecialChar));
