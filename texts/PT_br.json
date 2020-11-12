@@ -3283,9 +3283,9 @@
         "   ESTRELAS SECRETAS DO CASTELO"
     ],
     "options": {
-        "TEXT_OPT_OPTIONS": "OPCOES",
+        "TEXT_OPT_OPTIONS": "OPTIONS",
         "TEXT_OPT_CAMERA": "CAMERA",
-        "TEXT_OPT_CONTROLS": "CONTROLES",
+        "TEXT_OPT_CONTROLS": "CONTROLS",
         "TEXT_OPT_VIDEO": "DISPLAY",
         "TEXT_OPT_AUDIO": "SOUND",
         "TEXT_OPT_CHEATS": "CHEATS",
@@ -3423,3 +3423,4 @@
         "TEXT_FILE_MARIO_QUESTION": "Mario!"
     }
 }
+
