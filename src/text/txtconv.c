@@ -69,7 +69,7 @@ struct Character charmap[359] = {
     {"{00245}", {0x32, NULL}}, //   latin small letter o with tilde (PT_br)
     {"{00213}", {0x18, NULL}}, // latin capital letter O with tilde (PT_br)
     {"{00236}", {0x2c, NULL}}, //   latin small letter i with grave (ES_es)
-    {"{07765}", {0x33, NULL}}  //   latin small letter p with acute (ES_la)
+    {"{07765}", {0x33, NULL}},  //   latin small letter p with acute (ES_la)
      {"{", {123, NULL}},
 
 };
