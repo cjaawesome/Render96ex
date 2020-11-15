@@ -61,6 +61,8 @@ static struct GfxRenderingAPI *rendering_api;
 extern void gfx_run(Gfx *commands);
 extern void thread5_game_loop(void *arg);
 extern void create_next_audio_buffer(s16 *samples, u32 num_samples);
+extern void preload_codepoints();
+
 void game_loop_one_iteration(void);
 
 void dispatch_audio_sptask(struct SPTask *spTask) {
@@ -246,6 +248,8 @@ void main_func(char *argv[]) {
         fprintf(stdout, "precaching data\n");
         fflush(stdout);
         gfx_precache_textures();
+    } else {
+        preload_codepoints();
     }
 
 #ifdef DISCORDRPC
