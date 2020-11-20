@@ -328,6 +328,15 @@ static inline void load_texture(const char *fullpath) {
         u8 *data = stbi_load_from_memory(imgdata, imgsize, &w, &h, NULL, 4);
         free(imgdata);
         if (data) {
+            if (strncmp(fullpath, "gfx/textures/unicode/", 21) == 0) {
+                if (strncmp(fullpath + 21, "main", 4) == 0) {
+                    uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
+                    assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
+                   struct unifont_glyph *temp_glyph_pointer = get_unifont_glyph(codepoint);
+                    temp_glyph_pointer->visible_width = get_visible_width_from_main_png(data);
+                    temp_glyph_pointer->loaded_from_png  = 1;
+                }
+            }
             gfx_rapi->upload_texture(data, w, h);
             stbi_image_free(data); // don't need this anymore
             return;
@@ -351,9 +360,9 @@ static inline void load_texture(const char *fullpath) {
                     for (uint32_t j = 0; j < 8; j++) {
                         char bitmask = (1 << j);
                         if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
-                            one_x_texture[(j * 16) + (15 - i)] = 0xFFFFFFFF;
+                            one_x_texture[(j * w) + (15 - i)] = 0xFFFFFFFF;
                         } else {
-                            one_x_texture[(j * 16) + (15 - i)] = 0;
+                            one_x_texture[(j * w) + (15 - i)] = 0;
                         }
                     }
                 }
@@ -489,8 +498,8 @@ static void import_texture(int tile) {
     uint8_t siz = rdp.texture_tile.siz;
 
     if (!rdp.loaded_texture[tile].addr) {
-        fprintf(stderr, "NULL texture: tile %d, format %d/%d, size %d\n",
-                tile, (int)fmt, (int)siz, (int)rdp.loaded_texture[tile].size_bytes);
+ //       fprintf(stderr, "NULL texture: tile %d, format %d/%d, size %d\n",
+   //             tile, (int)fmt, (int)siz, (int)rdp.loaded_texture[tile].size_bytes);
         return;
     }
 

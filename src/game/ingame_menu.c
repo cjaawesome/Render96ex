@@ -30,6 +30,7 @@
 #endif
 
 #include "text/txtconv.h"
+#include "text/unifont_dyn.h"
 #include "text/text-loader.h"
 #include <stdio.h>
 #include <string.h>
@@ -286,13 +287,17 @@ char *get_unifont_address(char *str) {
 }
 
 void render_unicode_char(u32 codepoint){
-static const Vtx vertex_ia8_char[] = {
-    {{{     0,      0,      0}, 0, {     0,    256}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     8,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     8,     16,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     16,      0}, 0, {   480,    256}, {0xff, 0xff, 0xff, 0xff}}},
+static Vtx vertex_ia8_char[] = {
+    {{{     0,      1,      0}, 0, {     0,    256}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,      1,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,     17,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     17,      0}, 0, {   480,    256}, {0xff, 0xff, 0xff, 0xff}}},
 
-};
+}; int loaded_from_png = get_unifont_glyph(codepoint)->loaded_from_png;
+    vertex_ia8_char[0].n.ob[1] = 1-loaded_from_png;
+    vertex_ia8_char[1].n.ob[1] = 1-loaded_from_png;
+    vertex_ia8_char[2].n.ob[1] = 17-loaded_from_png;
+    vertex_ia8_char[3].n.ob[1] = 17-loaded_from_png;
     void *packedTexture;
     char buffer[27];
     sprintf(buffer,"textures/unicode/main.%04X",codepoint);
@@ -537,7 +542,7 @@ void print_generic_string(s16 x, s16 y, const u8 *str) {
                 break; // ? needed to match
             case '{':
                 render_unicode_char(str_to_codepoint(&str[strPos]));
-                create_dl_translation_matrix(MENU_MTX_NOPUSH, 7.5f, 0.0f, 0.0f);
+                create_dl_translation_matrix(MENU_MTX_NOPUSH, (float)(get_unifont_glyph(str_to_codepoint(&str[strPos]))->visible_width), 0.0f, 0.0f);
                 strPos += 6;
 
         
@@ -737,8 +742,10 @@ void print_menu_generic_string(s16 x, s16 y, const u8 *str) {
                 gSPTextureRectangle(gDisplayListHead++, curX << 2, curY << 2, (curX + 8) << 2,
                                     (curY + 8) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
+                curX += get_unifont_glyph(str_to_codepoint(&str[strPos]))->visible_width;
                 strPos += 6;
-                curX += 7;
+
+
                 break;
 
             default:
@@ -1064,8 +1071,18 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
 
     create_dl_translation_matrix(MENU_MTX_PUSH, X_VAL1, Y_VAL1, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.1f, ((f32) linesPerBox / Y_VAL2) + 0.1, 1.0f);
-
-    gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
+    static const Vtx vertex_text_bg_box[] = {
+        {{{     0,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+        {{{   260,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+        {{{   260,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+        {{{     0,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    };
+    gDPPipeSync(gDisplayListHead++);
+    gSPClearGeometryMode(gDisplayListHead++,G_LIGHTING);
+    gDPSetCombineMode(gDisplayListHead++,G_CC_FADE, G_CC_FADE);
+    gDPSetRenderMode(gDisplayListHead++,G_RM_XLU_SURF, G_RM_XLU_SURF2);
+    gSPVertex(gDisplayListHead++,vertex_text_bg_box, 4, 0);
+    gSP2Triangles(gDisplayListHead++, 0,  1,  2, 0x0,  0,  2,  3, 0x0);
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
@@ -1484,7 +1501,7 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                     }
 
                     render_unicode_char(str_to_codepoint(&str[strIdx]));
-                    create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(8), 0, 0);
+                create_dl_translation_matrix(MENU_MTX_NOPUSH, (float)(get_unifont_glyph(str_to_codepoint(&str[strIdx]))->visible_width), 0.0f, 0.0f);
                     xMatrix = 1;
                     linePos ++;
                     strIdx += 6;}
@@ -1796,7 +1813,7 @@ void render_dialog_entries(void) {
 
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE,
                   0,
-                  ensure_nonnegative(DIAG_VAL2 - dialog->width),
+                  ensure_nonnegative(DIAG_VAL2 - dialog->width - 5),//The -5 keeps the top of characters from getting cut off.
 #ifdef VERSION_EU
                   SCREEN_WIDTH,
                   ensure_nonnegative((240 - dialog->width) + ((dialog->linesPerBox * 80) / DIAG_VAL4) / gDialogBoxScale));

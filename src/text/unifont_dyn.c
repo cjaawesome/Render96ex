@@ -75,6 +75,8 @@ struct unifont_glyph *hex_string_to_unifont_glyph(char *hex_input) {
         if (i % 2 ==0)
             new_glyph->bitmap[i / 2]=new_glyph->bitmap[i / 2] << 4; //shift over 4 bits if most significant nibble(4 bits)
     }
+    new_glyph->visible_width = get_visible_width_from_bitmap(new_glyph->bitmap,strlen(hex_input) / 2);
+    new_glyph->loaded_from_png = 0;
     return new_glyph;
 }
 
@@ -148,7 +150,7 @@ struct unifont_glyph *get_unifont_glyph(u32 codepoint) {
     struct unifont_glyph *cursor = unifont_glyph_head; // this should be replaced when expanded to multiple fonts.
     while (cursor->codepoint != codepoint) {
         if (cursor->next == NULL) {
-            return NULL;
+            add_glyph_using_loaded_font(codepoint);
         } else {
             cursor = cursor->next;
         }
@@ -198,4 +200,27 @@ void preload_codepoints() {
 
     batch_add_glyphs(unifont_font_file, codepoints_to_load, count);
     free(codepoints_to_load);
+}
+/*bitmap is a 1bpp char* buffer.
+ This returns the right most visible pixel. It ignores any blank space on the left of the bitmap*/
+int get_visible_width_from_bitmap(char *bitmap, int size_of_bitmap) {
+
+    int visible_width = 0;
+    for (int i = 0; i < size_of_bitmap; i++) {
+        for (int j = 0; j < 8; j++)
+            if (bitmap[i] & 1 << j)
+                visible_width =  max(8-j,visible_width);
+    }
+    return visible_width;
+}
+/*Gets the visible width from a loaded main.XXXX.png RGBA buffer. Assumes 16x8x4 buffer*/
+int get_visible_width_from_main_png(u8 *RGBAbuffer) {
+
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 16; j++) {
+            if (RGBAbuffer[(i * 16 * 4) + (4 * j) + 3]) {
+                return 8 - i;
+            }
+        }
+    }
 }

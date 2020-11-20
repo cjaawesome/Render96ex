@@ -2,7 +2,8 @@
 #include "types.h"
 
 struct unifont_glyph{
-    int height, width;
+    int loaded_from_png;
+    int height, width, visible_width;
     u32 codepoint;
     char *bitmap;
     struct unifont_glyph *next;
@@ -17,5 +18,12 @@ int batch_add_glyphs(FILE *font_file, u32 codepoint_array[], u32 size);
 char *get_bitmap(u32 codepoint);
 struct unifont_glyph *get_unifont_glyph(u32 codepoint);
 void preload_codepoints();
+int get_visible_width_from_bitmap(char *bitmap, int size_of_bitmap);
+int get_visible_width_from_main_png(u8 *RGBAbuffer);
+
+
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+
+
 
 
