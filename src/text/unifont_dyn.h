@@ -2,8 +2,7 @@
 #include "types.h"
 
 struct unifont_glyph{
-    int loaded_from_png;
-    int height, width, visible_width;
+    int height, width, visible_width, loaded_from_png;;
     u32 codepoint;
     char *bitmap;
     struct unifont_glyph *next;
