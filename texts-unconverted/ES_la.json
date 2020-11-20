@@ -596,9 +596,9 @@
                 "[B] también para leer",
                 "letreros. Usa el Stick de",
                 "Control en el centro del",
-                "control para mover a Mario",
-                "alrededor. Ahora, ve hacia",
-                "el castillo."
+                "control para mover a",
+                "Mario alrededor. Ahora,",
+                "ve hacia el castillo."
             ]
         },
         {
@@ -2633,7 +2633,7 @@
                 "puedes abrir la puerta con",
                 "la gran Estrella! Pero ",
                 "Bowser está adelante...",
-                "Oyes el llamado de la",
+                "¿Oyes el llamado de la",
                 "princesa?"
             ]
         },
@@ -3331,7 +3331,6 @@
         "   GORRA INVISIBLE BAJO EL FOSO",
         "   MARIO ALADO SOBRE EL ARCOÍRIS",
         "   EL ACUARIO SECRETO",
-        null,
         "   ESTRELLAS OCULTAS"
     ],
     "options": {
@@ -3413,7 +3412,7 @@
         "TEXT_PAUSE": "PAUSA",
         "TEXT_HUD_CONGRATULATIONS": "FELICIDADES",
         "TEXT_MARIO": "MARIO",
-        "TEXT_SELECT_FILE": "SELECCIONE ARCHIVO",
+        "TEXT_SELECT_FILE": "ELIJA ARCHIVO",
         "TEXT_CHECK_FILE": "REVISAR ARCHIVO",
         "TEXT_COPY_FILE": "COPIAR ARCHIVO",
         "TEXT_ERASE_FILE": "BORRAR ARCHIVO",
@@ -3475,4 +3474,3 @@
         "TEXT_FILE_MARIO_QUESTION": "¡Mario!"
     }
 }
-
