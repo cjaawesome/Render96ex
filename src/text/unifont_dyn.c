@@ -8,16 +8,6 @@
 #include "pc/cliopts.h"
 extern char *exe_location;
 
-#ifndef _MAX_FNAME
-#ifdef __APPLE__
-    #include <sys/syslimits.h>
-    #define _MAX_FNAME NAME_MAX
-#elif defined __linux__
-    #include <linux/limits.h>
-    #define _MAX_FNAME PATH_MAX
-#endif
-#endif
-
 struct unifont_glyph *unifont_glyph_head = NULL; // This should be replaced if/when this is expanded to multiple font files.
 FILE *unifont_font_file = NULL;
 
@@ -162,8 +152,8 @@ struct unifont_glyph *get_unifont_glyph(u32 codepoint) {
 It does no error checking currently for missing files and will most likely crash if these files are missing/corrupted.
 Path/filename is hard coded but should be updated to load different fonts in future. (maybe) */
 void preload_codepoints() {
-    char unifont_path[_MAX_FNAME];
-    char unifont_codepoint_path[_MAX_FNAME];
+    char unifont_path[SYS_MAX_PATH];
+    char unifont_codepoint_path[SYS_MAX_PATH];
 
     strcpy(unifont_path, exe_location);
     strcpy(unifont_codepoint_path, exe_location);
@@ -174,7 +164,6 @@ void preload_codepoints() {
 
     strcat(unifont_path, "\\res\\gfx\\textures\\unicode\\unifont.hex");
     strcat(unifont_codepoint_path, "\\res\\gfx\\textures\\unicode\\unifontCodepoints.hex");
-
 #else
     *strrchr(unifont_codepoint_path, '/') = 0;
     *strrchr(unifont_path, '/') = 0;
