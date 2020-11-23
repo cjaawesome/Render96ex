@@ -27,7 +27,7 @@ else:
 if os.path.isdir(path):
     out_path = path.replace("texts-unconverted","texts")
     in_path = os.listdir(path)
-    exported_path = path.replace("texts-unconverted","textures" +os.sep+ "unicode/")
+    exported_path = path.replace("texts-unconverted","fonts"+os.sep)
     for file in in_path:
         lines = open(os.path.abspath(path +file), 'r', encoding='utf8').readlines()
         out = open(os.path.abspath(out_path +file), 'w')

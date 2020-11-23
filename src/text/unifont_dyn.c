@@ -38,7 +38,7 @@ char *read_hex_from_file(FILE *font_file, u32 codepoint, int start_from_begining
     };
     if (!*hex_str_buffer && !start_from_begining_of_file) 
     {
-      return  read_hex_from_file(font_file, codepoint, TRUE);
+        return  read_hex_from_file(font_file, codepoint, TRUE);
     }
     return NULL; 
 }
@@ -175,13 +175,13 @@ void preload_codepoints() {
     *strrchr(unifont_codepoint_path, '\\') = 0;
     *strrchr(unifont_path, '\\') = 0;
 
-    strcat(unifont_path, "\\res\\gfx\\textures\\unicode\\unifont.hex");
-    strcat(unifont_codepoint_path, "\\res\\gfx\\textures\\unicode\\unifontCodepoints.hex");
+    strcat(unifont_path, "\\res\\fonts\\unifont.hex");
+    strcat(unifont_codepoint_path, "\\res\\fonts\\unifontCodepoints.hex");
 #else
     *strrchr(unifont_codepoint_path, '/') = 0;
     *strrchr(unifont_path, '/') = 0;
-    strcat(unifont_path, "/res/gfx/textures/unicode/unifont.hex");
-    strcat(unifont_codepoint_path, "/res/gfx/textures/unicode/unifontCodepoints.hex");
+    strcat(unifont_path, "/res/fonts/unifont.hex");
+    strcat(unifont_codepoint_path, "/res/fonts/unifontCodepoints.hex");
 
 #endif
 
@@ -215,7 +215,7 @@ void preload_codepoints() {
     free(codepoints_to_load);
 }
 /*bitmap is a 1bpp char* buffer.
- This returns the right most visible pixel. It ignores any blank space on the left of the bitmap*/
+    This returns the right most visible pixel. It ignores any blank space on the left of the bitmap*/
 int get_visible_width_from_bitmap(char *bitmap,  int size_of_bitmap,  int width) {
 
     int visible_width = 0;
@@ -265,7 +265,7 @@ void rotate_texture(u8 **texture, int height, int width) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             memcpy( new_texture + ((size - (x * height) - y) * 4),(*texture) + (((y * width) + x) * 4),
-                   4);
+                    4);
         }
     }
     free(*texture);

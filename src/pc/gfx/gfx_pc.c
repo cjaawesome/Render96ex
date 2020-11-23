@@ -456,8 +456,8 @@ static void import_texture(int tile) {
     uint8_t siz = rdp.texture_tile.siz;
 
     if (!rdp.loaded_texture[tile].addr) {
- //       fprintf(stderr, "NULL texture: tile %d, format %d/%d, size %d\n",
-   //             tile, (int)fmt, (int)siz, (int)rdp.loaded_texture[tile].size_bytes);
+        fprintf(stderr, "NULL texture: tile %d, format %d/%d, size %d\n",
+                tile, (int)fmt, (int)siz, (int)rdp.loaded_texture[tile].size_bytes);
         return;
     }
 
@@ -1102,10 +1102,10 @@ static uint8_t color_comb_component(uint32_t v) {
 }
 
 static inline uint32_t color_comb(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
-    return color_comb_component(a) |
-           (color_comb_component(b) << 3) |
-           (color_comb_component(c) << 6) |
-           (color_comb_component(d) << 9);
+    return   color_comb_component(a) |
+            (color_comb_component(b) << 3) |
+            (color_comb_component(c) << 6) |
+            (color_comb_component(d) << 9);
 }
 
 static void gfx_dp_set_combine_mode(uint32_t rgb, uint32_t alpha) {
@@ -1570,8 +1570,8 @@ void gfx_init(struct GfxWindowManagerAPI *wapi, struct GfxRenderingAPI *rapi, co
 
 void gfx_precache_textures(void) {
     // preload all textures
-    fs_walk(FS_TEXTUREDIR, preload_texture, NULL, true);
     preload_codepoints();
+    fs_walk(FS_TEXTUREDIR, preload_texture, NULL, true);
 }
 
 struct GfxRenderingAPI *gfx_get_current_rendering_api(void) {

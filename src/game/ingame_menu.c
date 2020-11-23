@@ -308,8 +308,8 @@ if (get_unifont_glyph(codepoint)->loaded_from_png) {
 }
 
     void *packedTexture;
-    char buffer[27];
-    sprintf(buffer,"textures/unicode/main.%04X",codepoint);
+    char buffer[31];
+    sprintf(buffer,"textures/unicode/main.%04X.ia4",codepoint);
     packedTexture = get_unifont_address(buffer);
     gDPPipeSync(gDisplayListHead++);
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, VIRTUAL_TO_PHYSICAL(packedTexture));
@@ -658,8 +658,8 @@ void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
 
             if (str[strPos] == '{') {
                 void *packedTexture;
-                char buffer[27];
-                sprintf(buffer, "textures/unicode/hud.%04X", str_to_codepoint(&str[strPos]));
+                char buffer[33];
+                sprintf(buffer, "textures/unicode/hud.%04X.rgba16", str_to_codepoint(&str[strPos]));
                 packedTexture = get_unifont_address(buffer);
                 gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, packedTexture);
                 ;
@@ -740,14 +740,14 @@ void print_menu_generic_string(s16 x, s16 y, const u8 *str) {
                 break;
             case '{':;
                 void *packedTexture;
-                char buffer[27];
-                sprintf(buffer, "textures/unicode/menu.%04X", str_to_codepoint(&str[strPos]));
+                char buffer[34];
+                sprintf(buffer, "textures/unicode/menu.%04X.rgba16", str_to_codepoint(&str[strPos]));
                 packedTexture = get_unifont_address(buffer);
                 gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 1,
-                                   packedTexture);
+                                    packedTexture);
                 gDPLoadSync(gDisplayListHead++);
                 gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, 8 * 8 - 1,
-                             CALC_DXT(8, G_IM_SIZ_8b_BYTES));
+                                    CALC_DXT(8, G_IM_SIZ_8b_BYTES));
                 gSPTextureRectangle(gDisplayListHead++, curX << 2, curY << 2, (curX + 8) << 2,
                                     (curY + 8) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
@@ -903,7 +903,7 @@ s16 get_str_x_pos_from_center_scale(s16 centerPos, u8 *str, f32 scale) {
         if (str[strPos] == DIALOG_CHAR_SPACE) {
             spacesWidth += 1.0;
         } else if (str[strPos] != DIALOG_CHAR_DAKUTEN
-                   && str[strPos] != DIALOG_CHAR_PERIOD_OR_HANDAKUTEN) {
+                    && str[strPos] != DIALOG_CHAR_PERIOD_OR_HANDAKUTEN) {
             charsWidth += 1.0;
         }
         strPos++;
@@ -1071,7 +1071,7 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
         case DIALOG_TYPE_ZOOM: // Renders a dialog white box with zoom
             if (gDialogBoxState == DIALOG_STATE_OPENING || gDialogBoxState == DIALOG_STATE_CLOSING) {
                 create_dl_translation_matrix(MENU_MTX_NOPUSH, 65.0 - (65.0 / gDialogBoxScale),
-                                              (40.0 / gDialogBoxScale) - 40, 0);
+                                                (40.0 / gDialogBoxScale) - 40, 0);
                 create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0 / gDialogBoxScale, 1.0 / gDialogBoxScale, 1.0f);
             }
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 150);
@@ -1821,14 +1821,14 @@ void render_dialog_entries(void) {
     render_dialog_box_type(dialog, dialog->linesPerBox);
 
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE,
-                  0,
-                  ensure_nonnegative(DIAG_VAL2 - dialog->width - 5),//The -5 keeps the top of characters from getting cut off.
+                    0,
+                    ensure_nonnegative(DIAG_VAL2 - dialog->width - 5),//The -5 keeps the top of characters from getting cut off.
 #ifdef VERSION_EU
-                  SCREEN_WIDTH,
-                  ensure_nonnegative((240 - dialog->width) + ((dialog->linesPerBox * 80) / DIAG_VAL4) / gDialogBoxScale));
+                    SCREEN_WIDTH,
+                    ensure_nonnegative((240 - dialog->width) + ((dialog->linesPerBox * 80) / DIAG_VAL4) / gDialogBoxScale));
 #else
-                  SCREEN_WIDTH,
-                  ensure_nonnegative(240 + ((dialog->linesPerBox * 80) / DIAG_VAL4) - dialog->width));
+                    SCREEN_WIDTH,
+                     ensure_nonnegative(240 + ((dialog->linesPerBox * 80) / DIAG_VAL4) - dialog->width));
 #endif
 #if defined(VERSION_JP) || defined(VERSION_SH)
     handle_dialog_text_and_pages(0, dialog);
@@ -2532,7 +2532,7 @@ s16 render_pause_courses_and_castle(void) {
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | Z_TRIG | START_BUTTON))
 #else
             if (gPlayer3Controller->buttonPressed & A_BUTTON
-             || gPlayer3Controller->buttonPressed & START_BUTTON)
+                || gPlayer3Controller->buttonPressed & START_BUTTON)
 #endif
             {
                 level_set_transition(0, 0);
@@ -2559,7 +2559,7 @@ s16 render_pause_courses_and_castle(void) {
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | Z_TRIG | START_BUTTON))
 #else
             if (gPlayer3Controller->buttonPressed & A_BUTTON
-             || gPlayer3Controller->buttonPressed & START_BUTTON)
+                || gPlayer3Controller->buttonPressed & START_BUTTON)
 #endif
             {
                 level_set_transition(0, 0);
