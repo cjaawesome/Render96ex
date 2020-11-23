@@ -8,19 +8,27 @@
 #include "pc/cliopts.h"
 extern char *exe_location;
 
+#ifndef _MAX_FNAME
+#ifdef __APPLE__
+    #include <sys/syslimits.h>
+    #define _MAX_FNAME NAME_MAX
+#elif defined __linux__
+    #include <linux/limits.h>
+    #define _MAX_FNAME PATH_MAX
+#endif
+#endif
+
 struct unifont_glyph *unifont_glyph_head = NULL; // This should be replaced if/when this is expanded to multiple font files.
 FILE *unifont_font_file = NULL;
-
+char nul_texture[]={0xAA,0xAA,0x00,0x01,0x80,0x00,0x00,0x01,0x80,0x00,0x4A,0x51,0xEA,0x50,0x5A,0x51,0xC9,0x9E,0x00,0x01,0x80,0x00,0x00,0x01,0x80,0x00,0x00,0x01,0x80,0x00,0x55,0x55};
 
 /*This function loads a single glyph from the given font file and adds it to a linked list pointed to by unifont_glyph_head*/
 int add_glyph(FILE *font_file, u32 codepoint) {
     char *hex_buffer;
-    hex_buffer = read_hex_from_file(font_file, codepoint, TRUE); // This function returns an allocated buffer that needs to be freed.
-    if (!hex_buffer)
-        return -1; 
+    hex_buffer = read_hex_from_file(font_file, codepoint, TRUE); // This function returns an allocated buffer that needs to be freed. 
     if(!add_glyph_to_list_from_hex(&unifont_glyph_head, codepoint, hex_buffer)) { free(hex_buffer); return -1;}
     free(hex_buffer);
-    return 1;
+    return codepoint;
 }
 int add_glyph_using_loaded_font(u32 codepoint){
     return add_glyph(unifont_font_file,codepoint);
@@ -37,11 +45,11 @@ char *read_hex_from_file(FILE *font_file, u32 codepoint, int start_from_begining
             return strdup(strchr(hex_str_buffer, ':')+ 1); // Return a copy of the hex string from the file. The +1 starts the string at the first character after the ':'
         }
     };
-    if (!*hex_str_buffer)
+    if (!*hex_str_buffer && !start_from_begining_of_file) 
     {
-        read_hex_from_file(font_file, codepoint, TRUE);
+      return  read_hex_from_file(font_file, codepoint, TRUE);
     }
-    
+    return NULL; 
 }
 /* Function returns a new glyph from hex string data. Height is assumed to be 16, this may be overwritten in the calling function if needed */
 struct unifont_glyph *hex_string_to_unifont_glyph(char *hex_input) {
@@ -49,24 +57,37 @@ struct unifont_glyph *hex_string_to_unifont_glyph(char *hex_input) {
     struct unifont_glyph *new_glyph = malloc(sizeof(struct unifont_glyph)); // allocate a new unifont glyph
 
     new_glyph->height = 16; // all unifont characters are 16 pixels in height
-    new_glyph->width = (strlen(hex_input) / new_glyph->height * 8  /2); //each hex character encodes half a byte, 1 byte encodes 8 pixels
-    new_glyph->bitmap = malloc(strlen(hex_input) / 2); // each hex character is half a byte
-    memset(new_glyph->bitmap,0,strlen(hex_input) / 2);
-    for (int i = 0; hex_input[i] && hex_input[i]!='\n'; i++) {// this for loop cycles through the input buffer and fills the bitmap with data 
+    if (hex_input) {
+        new_glyph->width = (strlen(hex_input) / new_glyph->height * 8 / 2); // each hex character encodes half a byte, 1 byte encodes 8 pixels
+        new_glyph->bitmap = malloc(strlen(hex_input) / 2); // each hex character is half a byte
+        memset(new_glyph->bitmap, 0, strlen(hex_input) / 2);
+        for (int i = 0; hex_input[i] && hex_input[i] != '\n';
+             i++) { // this for loop cycles through the input buffer and fills the bitmap with data
 
-        if (hex_input[i] >= '0' && hex_input[i] <= '9') 
-            new_glyph->bitmap[i / 2] += hex_input[i] - '0';
-        else if (hex_input[i] >= 'A' && hex_input[i] <= 'F')
-            new_glyph->bitmap[i / 2] += hex_input[i] - 'A' + 10;
-        else if (hex_input[i] >= 'a' && hex_input[i] <= 'f')
-            new_glyph->bitmap[i / 2] += hex_input[i] - 'a' + 10;
-        else
-            return NULL; //return null if input is not a hex character
-        if (i % 2 ==0)
-            new_glyph->bitmap[i / 2]=new_glyph->bitmap[i / 2] << 4; //shift over 4 bits if most significant nibble(4 bits)
+            if (hex_input[i] >= '0' && hex_input[i] <= '9')
+                new_glyph->bitmap[i / 2] += hex_input[i] - '0';
+            else if (hex_input[i] >= 'A' && hex_input[i] <= 'F')
+                new_glyph->bitmap[i / 2] += hex_input[i] - 'A' + 10;
+            else if (hex_input[i] >= 'a' && hex_input[i] <= 'f')
+                new_glyph->bitmap[i / 2] += hex_input[i] - 'a' + 10;
+            else
+                return NULL; // return null if input is not a hex character
+            if (i % 2 == 0)
+                new_glyph->bitmap[i / 2] = new_glyph->bitmap[i / 2]
+                                           << 4; // shift over 4 bits if most significant nibble(4 bits)
+        }
+        new_glyph->visible_width =
+            get_visible_width_from_bitmap(new_glyph->bitmap, strlen(hex_input) / 2, new_glyph->width);
+        new_glyph->loaded_from_png = 0;
+
+    } else {
+        new_glyph->width = 16;
+        
+        new_glyph->bitmap = nul_texture;
+        new_glyph->visible_width = 0;
+        new_glyph->loaded_from_png = 1;
     }
-    new_glyph->visible_width = get_visible_width_from_bitmap(new_glyph->bitmap,strlen(hex_input) / 2);
-    new_glyph->loaded_from_png = 0;
+    
     return new_glyph;
 }
 
@@ -141,6 +162,7 @@ struct unifont_glyph *get_unifont_glyph(u32 codepoint) {
     while (cursor->codepoint != codepoint) {
         if (cursor->next == NULL) {
             add_glyph_using_loaded_font(codepoint);
+            return cursor->next;
         } else {
             cursor = cursor->next;
         }
@@ -152,8 +174,8 @@ struct unifont_glyph *get_unifont_glyph(u32 codepoint) {
 It does no error checking currently for missing files and will most likely crash if these files are missing/corrupted.
 Path/filename is hard coded but should be updated to load different fonts in future. (maybe) */
 void preload_codepoints() {
-    char unifont_path[SYS_MAX_PATH];
-    char unifont_codepoint_path[SYS_MAX_PATH];
+    char unifont_path[_MAX_FNAME];
+    char unifont_codepoint_path[_MAX_FNAME];
 
     strcpy(unifont_path, exe_location);
     strcpy(unifont_codepoint_path, exe_location);
@@ -164,6 +186,7 @@ void preload_codepoints() {
 
     strcat(unifont_path, "\\res\\gfx\\textures\\unicode\\unifont.hex");
     strcat(unifont_codepoint_path, "\\res\\gfx\\textures\\unicode\\unifontCodepoints.hex");
+
 #else
     *strrchr(unifont_codepoint_path, '/') = 0;
     *strrchr(unifont_path, '/') = 0;
@@ -174,7 +197,18 @@ void preload_codepoints() {
 
 
     unifont_font_file = fopen(unifont_path, "r");
+    if (unifont_font_file == NULL) {
+        printf("Error opening file %s\nError: %s\n", unifont_path, strerror(errno));
+        add_glyph_to_list_from_hex(&unifont_glyph_head, 0, NULL);
+        return;
+    }
+
     FILE *unifont_codepoint_file = fopen(unifont_codepoint_path, "r");
+    if (unifont_codepoint_file == NULL) {
+        printf("Error opening file %s\nError: %s\n", unifont_codepoint_path, strerror(errno));
+        add_glyph_to_list_from_hex(&unifont_glyph_head, 0, NULL);
+        return;
+    }
     char buffer[255];
     u32 count = 0;
     while (fgets(buffer, sizeof buffer, unifont_codepoint_file)) {
@@ -192,7 +226,7 @@ void preload_codepoints() {
 }
 /*bitmap is a 1bpp char* buffer.
  This returns the right most visible pixel. It ignores any blank space on the left of the bitmap*/
-int get_visible_width_from_bitmap(char *bitmap, int size_of_bitmap) {
+int get_visible_width_from_bitmap(char *bitmap,  int size_of_bitmap,  int width) {
 
     int visible_width = 0;
     for (int i = 0; i < size_of_bitmap; i++) {
@@ -212,4 +246,39 @@ int get_visible_width_from_main_png(u8 *RGBAbuffer) {
             }
         }
     }
+}
+/* Returns an char array pointer when given a unifont bitmap (1bpp)
+Size is number of bytes in bitmap  
+MUST FREE() RETURN POINTER! */
+u8 *RGBA_from_unifont(u8 *bitmap, int size) {
+
+    u8 *RGBA;
+    RGBA = malloc(size * 4 * 8); // Size of bitmap * number of channels (RGBA) * bits in byte
+    for (int i = 0; i < size; i++) {       // For each byte
+        for (int j = 7; j >=0; j--) {     // For each bit in byte
+            if (bitmap[i] & (char)(1 << j)) {
+                memset(RGBA +(((i * 8) + (7 - j)) * 4), 0xFF,
+                       4); // if bit is 1, set pixel to fully opaque and white.
+            } else {
+                memset(RGBA +(((i * 8) + (7 - j)) * 4), 0x00,
+                       4); // if bit is zero, set pixel to fully transparent and black.
+            }
+        }
+    }
+    return RGBA;
+}
+/* Rotates texture 90 degrees clockwise and flips it as needed for the main font glyphs.
+This is less memory efficient than it could be, but should run faster (Maybe) */
+void rotate_texture(u8 **texture, int height, int width) {
+    int size = height * width;
+    u8 *new_texture = malloc(sizeof(u8) * height * width * 4);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            memcpy( new_texture + ((size - (x * height) - y) * 4),(*texture) + (((y * width) + x) * 4),
+                   4);
+        }
+    }
+    free(*texture);
+    *texture = new_texture;
+    return;
 }

@@ -7,16 +7,7 @@
 
 /* Platform-specific functions and whatnot */
 
-#ifdef WIN32
-    #include <stdio.h>
-    #define SYS_MAX_PATH _MAX_FNAME
-#elif __APPLE__
-    #include <sys/syslimits.h>
-    #define SYS_MAX_PATH NAME_MAX
-#elif defined __linux__
-    #include <linux/limits.h>
-    #define SYS_MAX_PATH PATH_MAX
-#endif
+#define SYS_MAX_PATH 1024 // FIXME: define this on different platforms
 
 // NULL terminated list of platform specific read-only data paths
 extern const char *sys_ropaths[];

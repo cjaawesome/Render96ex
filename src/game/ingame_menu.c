@@ -287,17 +287,26 @@ char *get_unifont_address(char *str) {
 }
 
 void render_unicode_char(u32 codepoint){
-static Vtx vertex_ia8_char[] = {
+static Vtx vertex_unifont_char[] = {
     {{{     0,      1,      0}, 0, {     0,    256}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     8,      1,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     8,     17,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,     17,      0}, 0, {   480,    256}, {0xff, 0xff, 0xff, 0xff}}},
 
-}; int loaded_from_png = get_unifont_glyph(codepoint)->loaded_from_png;
-    vertex_ia8_char[0].n.ob[1] = 1-loaded_from_png;
-    vertex_ia8_char[1].n.ob[1] = 1-loaded_from_png;
-    vertex_ia8_char[2].n.ob[1] = 17-loaded_from_png;
-    vertex_ia8_char[3].n.ob[1] = 17-loaded_from_png;
+};static Vtx vertex_png_char[] = {
+    {{{     0,      0,      0}, 0, {     0,    256}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     8,     16,      0}, 0, {   480,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     16,      0}, 0, {   480,    256}, {0xff, 0xff, 0xff, 0xff}}},
+
+};
+Vtx *unicode_vertex;
+if (get_unifont_glyph(codepoint)->loaded_from_png) {
+    unicode_vertex = vertex_png_char;
+} else {
+    unicode_vertex = vertex_unifont_char;
+}
+
     void *packedTexture;
     char buffer[27];
     sprintf(buffer,"textures/unicode/main.%04X",codepoint);
@@ -309,7 +318,7 @@ static Vtx vertex_ia8_char[] = {
     gDPLoadBlock(gDisplayListHead++,G_TX_LOADTILE, 0, 0, (16*8), CALC_DXT(8, G_IM_SIZ_16b_BYTES));
     gDPSetTile(gDisplayListHead++,G_IM_FMT_IA, G_IM_SIZ_16b, 1, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP | G_TX_NOMIRROR, 4, G_TX_NOLOD, G_TX_CLAMP | G_TX_NOMIRROR, 4, G_TX_NOLOD);
     gDPSetTileSize(gDisplayListHead++,0, 0, 0, (16-1) << G_TEXTURE_IMAGE_FRAC, (8-1) << G_TEXTURE_IMAGE_FRAC);
-    gSPVertex(gDisplayListHead++,vertex_ia8_char, 4, 0);
+    gSPVertex(gDisplayListHead++,unicode_vertex, 4, 0);
     gSP2Triangles(gDisplayListHead++, 0,  1,  2, 0x0, 0,  2,  3, 0x0);
     }
     

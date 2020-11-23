@@ -332,9 +332,9 @@ static inline void load_texture(const char *fullpath) {
                 if (strncmp(fullpath + 21, "main", 4) == 0) {
                     uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
                     assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
-                   struct unifont_glyph *temp_glyph_pointer = get_unifont_glyph(codepoint);
+                    struct unifont_glyph *temp_glyph_pointer = get_unifont_glyph(codepoint);
                     temp_glyph_pointer->visible_width = get_visible_width_from_main_png(data);
-                    temp_glyph_pointer->loaded_from_png  = 1;
+                    temp_glyph_pointer->loaded_from_png = 1;
                 }
             }
             gfx_rapi->upload_texture(data, w, h);
@@ -343,68 +343,29 @@ static inline void load_texture(const char *fullpath) {
         }
     } else {
         if (strncmp(fullpath, "gfx/textures/unicode/", 21) == 0) {
+            char *filename_pointer = strrchr(fullpath, '/') + 1;
+            uint32_t codepoint = strtol(strchr(filename_pointer, '.')+1, 0x0, 16);
+            assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
+            struct unifont_glyph *temp_unifont_glyph_ptr = get_unifont_glyph(codepoint);
+            int bitmap_size = temp_unifont_glyph_ptr->height * temp_unifont_glyph_ptr->width / 8;
+            u8 *RGBA_buffer = NULL;
 
-            uint8_t rgba32_buf[16 *  16 * 4];
-            uint32_t one_x_texture[16 * 16];
-            memset(one_x_texture, 0, sizeof(one_x_texture));
+            if (strncmp(filename_pointer, "main", 4) == 0) {
+                w = temp_unifont_glyph_ptr->height;
+                h = temp_unifont_glyph_ptr->width;
+                RGBA_buffer = RGBA_from_unifont(temp_unifont_glyph_ptr->bitmap, bitmap_size);
+                rotate_texture(&RGBA_buffer, w, h);
 
-            if (strncmp(fullpath + 21, "main", 4) == 0) {
-                uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
-                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
-                if (get_unifont_glyph(codepoint) == NULL) {
-                    add_glyph_using_loaded_font(codepoint);
-                }
-                w = 16;
-                h = get_unifont_glyph(codepoint)->width;
-                for (uint32_t i = 0; i < w; i++) {
-                    for (uint32_t j = 0; j < 8; j++) {
-                        char bitmask = (1 << j);
-                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
-                            one_x_texture[(j * w) + (15 - i)] = 0xFFFFFFFF;
-                        } else {
-                            one_x_texture[(j * w) + (15 - i)] = 0;
-                        }
-                    }
-                }
-            } else if (strncmp(fullpath + 21, "menu", 4) == 0) {
-                uint32_t codepoint = strtol((fullpath + 26), 0x0, 16);
-                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
-                if (get_unifont_glyph(codepoint) == NULL) {
-                    add_glyph_using_loaded_font(codepoint);
-                }
-                h = 16;
-                w = get_unifont_glyph(codepoint)->width+1;
-                 for (uint32_t i = 0; i < 16; i++) {
-                    for (uint32_t j = 0; j < 8; j++) {
-                        char bitmask = (1 << j);
-                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
-                            one_x_texture[(i * 9) + (8 - j)] = 0xFFFFFFFF;
+            } else if (strncmp(filename_pointer, "menu", 4) == 0) {
 
-                        } else {
-                            one_x_texture[(i * 9) + (8 - j)] = 0;
-                        }
-                    }
-                }
+                h = temp_unifont_glyph_ptr->height;
+                w = temp_unifont_glyph_ptr->width;
+                RGBA_buffer = RGBA_from_unifont(temp_unifont_glyph_ptr->bitmap, bitmap_size);
 
-            } else if (strncmp(fullpath + 21, "hud", 3) == 0) {
-                uint32_t codepoint = strtol((fullpath + 25), 0x0, 16);
-                assert(codepoint <= 0xFFFF && "Unicode codepoint too large!");
-                if (get_unifont_glyph(codepoint) == NULL) {
-                    add_glyph_using_loaded_font(codepoint);
-                }
-                h = 16;
-                w = get_unifont_glyph(codepoint)->width + 1;
-                for (uint32_t i = 0; i < 16; i++) {
-                    for (uint32_t j = 0; j < 8; j++) {
-                        char bitmask = (1 << j);
-                        if (*(get_unifont_glyph(codepoint)->bitmap + i) & bitmask) {
-                            one_x_texture[(i * 9) + (8 - j)] = 0xFFFFFFFF;
-
-                        } else {
-                            one_x_texture[(i * 9) + (8 - j)] = 0;
-                        }
-                    }
-                }
+            } else if (strncmp(filename_pointer, "hud", 3) == 0) {
+                h = temp_unifont_glyph_ptr->height;
+                w = temp_unifont_glyph_ptr->width;
+                RGBA_buffer = RGBA_from_unifont(temp_unifont_glyph_ptr->bitmap, bitmap_size);
 
             } else {
                 fprintf(stderr, "could not load unifont texture: `%s`\n", fullpath);
@@ -413,11 +374,8 @@ static inline void load_texture(const char *fullpath) {
                 return;
             }
 
-            for (int i = 0; i < sizeof(one_x_texture); i++) {
-                rgba32_buf[i] = (one_x_texture[i / 4] >> (8 * (i % 4))) & 0xFF;
-            }
-
-            gfx_rapi->upload_texture(rgba32_buf, w, h);
+            gfx_rapi->upload_texture(RGBA_buffer, w, h);
+            free(RGBA_buffer);
             return;
         }
     }

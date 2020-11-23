@@ -7,7 +7,7 @@ import glob
 import re
 from pathlib import Path
 
-path = "charmap.txt"
+path = "/home/alex/Documents/Projects/Render96/Render96ex - FastBuild/charmap.txt"
 lines = open(os.path.abspath(path), 'r').readlines()
 
 lineID = {}
