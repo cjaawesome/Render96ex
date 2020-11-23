@@ -612,7 +612,7 @@ $(BASEPACK_LST): $(EXE)
 	@find actors -name \*.png -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
 	@find levels -name \*.png -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
 	@find textures -name \*.png -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
-	@find fonts -name \*.hex -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
+	@find fonts -name \*.hex -exec echo "{} {}" >> $(BASEPACK_LST) \;
 	@find texts -name \*.json -exec echo "{} {}" >> $(BASEPACK_LST) \;
 
 ifneq ($(NO_COPY),1)
