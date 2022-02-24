@@ -68,7 +68,7 @@ s8 notificationStatus = FALSE;
 
 void triggerLuigiNotification(){
     if(!notificationStatus){
-        r96_play_collect_jingle(R96_EVENT_SOLVE_PUZZLE);
+        r96_play_collect_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
         queue_rumble_data(15, 80);
         set_notification_state(TRUE);
         notificationStatus = TRUE;

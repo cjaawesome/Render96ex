@@ -214,10 +214,10 @@ static void *DynOS_Warp_UpdateWarp(void *aCmd, bool aIsLevelInitDone) {
         for (u16 seqid = 0; seqid != SEQ_COUNT; ++seqid) {
         stop_background_music(seqid);
         }
-        r96_play_shell_music();
-        r96_stop_shell_music();
-        stop_cap_music();
-        r96_stop_cap_music();
+        //r96_play_shell_music();
+        //r96_stop_shell_music();
+        //stop_cap_music();
+        //r96_stop_cap_music();
         func_80321080(0);
         fadeout_music(0);
         fadeout_level_music(0);

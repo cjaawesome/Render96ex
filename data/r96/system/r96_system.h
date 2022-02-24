@@ -68,27 +68,39 @@ void r96_cap_music_boss_fix();
 
 // Jingle Functions
 
-void r96_play_menu_jingle(const char* R96_JINGLE);
-void r96_play_jingle(const char* R96_JINGLE);
-void r96_play_collect_jingle(const char* R96_JINGLE);
+void r96_play_menu_jingle(const char* R96_JINGLE, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
+void r96_play_jingle(const char* R96_JINGLE, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
+void r96_play_collect_jingle(const char* R96_JINGLE, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 void r96_stop_jingle();
-void r96_jingle_fade_in();
-void r96_jingle_fade_out();
+void r96_jingle_fade(bool aEnd, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 
 // Music Functions
 
-void r96_play_music(const char* R96_MUSIC);
-void r96_play_multi_music(const char* R96_MUSIC);
+void r96_play_music(const char* R96_MUSIC, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
+void r96_play_multi_music(const char* R96_MUSIC, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 void r96_stop_music();
-void r96_music_fade_in();
-void r96_music_fade_out();
-
-// When the fanfare is playing and the pause window opens
-void r96_lower_music();
+void r96_music_fade(bool aEnd, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime, bool fadein);
 
 const char *r96_get_intended_level_music();
 void r96_level_music_update();
 
 extern void internal_resolution();
 
+typedef struct {
+    const char* name;
+    f32 roomSize;
+    f32 damping;
+    f32 width;
+    f32 wetVolume;
+    f32 dryVolume;
+    f32 mode;
+} EffectData;
+
+extern EffectData R96_EffectData[LEVEL_MAX+1][5];
+
+extern void R96_Effect_Init();
+
+extern s32 gCurrIndex;
+
+extern int R96_SoundCount[LEVEL_MAX+1];
 #endif // R96_SYSTEM_H

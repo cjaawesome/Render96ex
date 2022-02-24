@@ -19,7 +19,7 @@ void bhv_milk_interact(void)
 {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         if(o->oTimer == 1) {
-            r96_play_music(R96_EVENT_GOT_MILK);
+            r96_play_music(R96_EVENT_GOT_MILK, 0.1, 1.0, 2500);
             play_sound(SOUND_MENU_EXIT_PIPE, gDefaultSoundArgs);
         }
         if(o->oTimer < 50) {

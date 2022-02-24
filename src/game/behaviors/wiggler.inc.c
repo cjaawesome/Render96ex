@@ -224,7 +224,7 @@ static void wiggler_act_walk(void) {
         if (o->oWigglerTextStatus == WIGGLER_TEXT_STATUS_AWAIT_DIALOG) {
             if (gMarioObject->oPosY >= o->oPosY) {
                 if (!dynos_jingle_is_playing(R96_EVENT_CREDITS))
-                    r96_play_music(R96_EVENT_BOSS_INTRO);
+                    r96_play_music(R96_EVENT_BOSS_INTRO, 0.1, 1.0, 2500);
             }
             func_8031FFB4(SEQ_PLAYER_LEVEL, 60, 40);
             o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_SHOWING_DIALOG;

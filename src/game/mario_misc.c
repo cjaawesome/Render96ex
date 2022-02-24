@@ -109,7 +109,7 @@ static void toad_message_faded(void) {
         gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
     }
     if (cheats_jukebox(gMarioState) == -1) {
-        r96_stop_jingle();
+    //    r96_stop_jingle();
     }
 }
 
@@ -122,7 +122,8 @@ static void toad_message_opaque(void) {
             if (gCurrentObject->oInteractStatus & INT_STATUS_INTERACTED) {
                 gCurrentObject->oInteractStatus = 0;
                 gCurrentObject->oToadMessageState = TOAD_MESSAGE_TALKING;
-                r96_play_jingle(R96_EVENT_TOAD_MESSAGE);
+                r96_play_jingle(R96_EVENT_TOAD_MESSAGE, 0.1, 1.0, 1);
+                r96_music_fade(0, -1, 0.1, 500, 1);
             }
         }
     }

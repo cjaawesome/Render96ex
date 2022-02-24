@@ -53,30 +53,6 @@
 
 #define WARP_NODE_CREDITS_MIN 0xF8
 
-#ifdef VERSION_JP
-const char *credits01[] = { "1GAME DIRECTOR", "SHIGERU MIYAMOTO" };
-const char *credits02[] = { "2ASSISTANT DIRECTORS", "YOSHIAKI KOIZUMI", "TAKASHI TEZUKA" };
-const char *credits03[] = { "2SYSTEM PROGRAMMERS", "YASUNARI NISHIDA", "YOSHINORI TANIMOTO" };
-const char *credits04[] = { "3PROGRAMMERS", "HAJIME YAJIMA", "DAIKI IWAMOTO", "TOSHIO IWAWAKI" };
-const char *credits05[] = { "1CAMERA PROGRAMMER", "TAKUMI KAWAGOE" };
-const char *credits06[] = { "1MARIO FACE PROGRAMMER", "GILES GODDARD" };
-const char *credits07[] = { "2COURSE DIRECTORS", "YOICHI YAMADA", "YASUHISA YAMAMURA" };
-const char *credits08[] = { "2COURSE DESIGNERS", "KENTA USUI", "NAOKI MORI" };
-const char *credits09[] = { "3COURSE DESIGNERS", "YOSHIKI HARUHANA", "MAKOTO MIYANAGA",
-                            "KATSUHIKO KANNO" };
-const char *credits10[] = { "1SOUND COMPOSER", "KOJI KONDO" };
-const char *credits11[] = { "1SOUND EFFECTS", "YOJI INAGAKI" };
-const char *credits12[] = { "1SOUND PROGRAMMER", "HIDEAKI SHIMIZU" };
-const char *credits13[] = { "23D ANIMATORS", "YOSHIAKI KOIZUMI", "SATORU TAKIZAWA" };
-const char *credits14[] = { "1CG DESIGNER", "MASANAO ARIMOTO" };
-const char *credits15[] = { "3TECHNICAL SUPPORT", "TAKAO SAWANO", "HIROHITO YOSHIMOTO", "HIROTO YADA" };
-const char *credits16[] = { "1TECHNICAL SUPPORT", "SGI. 64PROJECT STAFF" };
-const char *credits17[] = { "2PROGRESS MANAGEMENT", "KIMIYOSHI FUKUI", "KEIZO KATO" };
-const char *credits18[] = { "3SPECIAL THANKS TO", "JYOHO KAIHATUBU", "ALL NINTENDO",
-                            "MARIO CLUB STAFF" };
-const char *credits19[] = { "1PRODUCER", "SHIGERU MIYAMOTO" };
-const char *credits20[] = { "1EXECUTIVE PRODUCER", "HIROSHI YAMAUCHI" };
-#else
 const char *credits01[] = { "1GAME DIRECTOR", "SHIGERU MIYAMOTO" };
 const char *credits02[] = { "2ASSISTANT DIRECTORS", "YOSHIAKI KOIZUMI", "TAKASHI TEZUKA" };
 const char *credits03[] = { "2SYSTEM PROGRAMMERS", "YASUNARI NISHIDA", "YOSHINORI TANIMOTO" };
@@ -88,7 +64,6 @@ const char *credits06[] = { "2COURSE DIRECTORS", "YOICHI YAMADA", "YASUHISA YAMA
 const char *credits07[] = { "2COURSE DESIGNERS", "KENTA USUI", "NAOKI MORI" };
 const char *credits08[] = { "3COURSE DESIGNERS", "YOSHIKI HARUHANA", "MAKOTO MIYANAGA",
                             "KATSUHIKO KANNO" };
-#ifdef VERSION_US
 const char *credits09[] = { "1SOUND COMPOSER", "KOJI KONDO" };
 const char *credits10[] = { "4SOUND EFFECTS", "SOUND PROGRAMMER", "YOJI INAGAKI",
                             "HIDEAKI SHIMIZU" }; // as well as sound effects and sound programmer
@@ -99,32 +74,11 @@ const char *credits14[] = { "1TECHNICAL SUPPORT", "SGI N64 PROJECT STAFF" };
 const char *credits15[] = { "2PROGRESS MANAGEMENT", "KIMIYOSHI FUKUI", "KEIZO KATO" };
 const char *credits16[] = { "5SCREEN TEXT WRITER", "TRANSLATION", "LESLIE SWAN", "MINA AKINO",
                             "HIRO YAMADA" }; // ...in order to make room for these 2 new lines
-#else // VERSION_EU
-const char *credits09[] = { "7SOUND COMPOSER", "SOUND EFFECTS", "SOUND PROGRAMMER", "KOJI KONDO",
-                            "YOJI INAGAKI", "HIDEAKI SHIMIZU" };
-const char *credits10[] = { "63-D ANIMATORS", "ADDITIONAL GRAPHICS", "YOSHIAKI KOIZUMI", "SATORU TAKIZAWA",
-                            "MASANAO ARIMOTO" };
-const char *credits11[] = { "3TECHNICAL SUPPORT", "TAKAO SAWANO", "HIROHITO YOSHIMOTO", "HIROTO YADA" };
-const char *credits12[] = { "1TECHNICAL SUPPORT", "SGI N64 PROJECT STAFF" };
-const char *credits13[] = { "2PROGRESS MANAGEMENT", "KIMIYOSHI FUKUI", "KEIZO KATO" };
-const char *credits14[] = { "5SCREEN TEXT WRITER", "ENGLISH TRANSLATION", "LESLIE SWAN", "MINA AKINO",
-                            "HIRO YAMADA" };
-const char *credits15[] = { "4SCREEN TEXT WRITER", "FRENCH TRANSLATION", "JULIEN BARDAKOFF",
-                            "KENJI HARAGUCHI" };
-const char *credits16[] = { "4SCREEN TEXT WRITER", "GERMAN TRANSLATION", "THOMAS GOERG",
-                            "THOMAS SPINDLER" };
-#endif
 const char *credits17[] = { "4MARIO VOICE", "PEACH VOICE", "CHARLES MARTINET", "LESLIE SWAN" };
 const char *credits18[] = { "3SPECIAL THANKS TO", "EAD STAFF", "ALL NINTENDO PERSONNEL",
-#ifdef VERSION_US
                            "MARIO CLUB STAFF" };
-#else // VERSION_EU
-                           "SUPER MARIO CLUB STAFF" };
-#endif
 const char *credits19[] = { "1PRODUCER", "SHIGERU MIYAMOTO" };
 const char *credits20[] = { "1EXECUTIVE PRODUCER", "HIROSHI YAMAUCHI" };
-#endif
-
 
 struct CreditsEntry sCreditsSequence[] = {
     { LEVEL_CASTLE_GROUNDS, 1, 1, -128, { 0, 8000, 0 }, NULL },
@@ -229,7 +183,7 @@ void fade_into_special_warp(u32 arg, u32 color) {
     if (color != 0) {
         color = 0xFF;
     }
-
+    r96_music_fade(1, -1, 0.0, 512, 0);
     fadeout_music(190);
     play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x10, color, color, color);
     level_set_transition(30, NULL);
@@ -443,23 +397,19 @@ void init_mario_after_warp(void) {
         if (gMarioState->flags & MARIO_VANISH_CAP) r96_play_cap_music(R96_EVENT_CAP_VANISH);
         if (gMarioState->flags & MARIO_WING_CAP)   r96_play_cap_music(R96_EVENT_CAP_WING);
 
-        //if (gMarioState->flags & MARIO_NORMAL_CAP) {
-        //    r96_stop_cap_music();
-        //}
-
         if (sWarpDest.levelNum == LEVEL_CASTLE && sWarpDest.areaIdx == 1
             && (sWarpDest.nodeId == 31 || sWarpDest.nodeId == 32)
         ) {
-            dynos_jingle_stop();
-            dynos_music_stop();
+            r96_stop_jingle();
+            r96_stop_music();
             play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gDefaultSoundArgs);
 
         }
         if (sWarpDest.levelNum == LEVEL_CASTLE_GROUNDS && sWarpDest.areaIdx == 1
             && (sWarpDest.nodeId == 7 || sWarpDest.nodeId == 10 || sWarpDest.nodeId == 20
                 || sWarpDest.nodeId == 30)) {
-            dynos_jingle_stop();
-            dynos_music_stop();
+            r96_stop_jingle();
+            r96_stop_music();
             play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gDefaultSoundArgs);
         }
     }
@@ -686,6 +636,7 @@ void initiate_painting_warp(void) {
                 gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
 
                 play_sound(SOUND_MENU_STAR_SOUND, gDefaultSoundArgs);
+                r96_music_fade(1, -1, 0.0, 4200, 0);
                 fadeout_music(398);
                 queue_rumble_data(80, 70);
                 func_sh_8024C89C(1);
@@ -1016,6 +967,7 @@ s32 play_mode_paused(void) {
         set_menu_mode(RENDER_PAUSE_SCREEN);
     } else if (gPauseScreenMode == 1) {
         raise_background_noise(1);
+        r96_music_fade(0, -1, 1.0, 1500, 0);
         gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
         set_play_mode(PLAY_MODE_NORMAL);
     } else if (gPauseScreenMode == 2) {
@@ -1327,7 +1279,8 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
 s32 lvl_play_the_end_screen_sound(UNUSED s16 arg0, UNUSED s32 arg1) {
     if (save_file_get_total_star_count(gCurrSaveFileNum - 1, 0, 24) < 70) {
         play_sound(SOUND_OBJ_BOWSER_LAUGH, gDefaultSoundArgs);
-        r96_play_jingle(R96_EVENT_KOOPA_MESSAGE);
+        r96_play_jingle(R96_EVENT_KOOPA_MESSAGE, 0.1, 1.0, 1500);
+        r96_music_fade(0, -1, 0.0, 1, 1);
     }
     else {
         r96_play_character_sound_no_arg(R96_MARIO_THANK_YOU_PLAYING_MY_GAME, R96_LUIGI_THANK_YOU_PLAYING_MY_GAME, R96_WARIO_THANK_YOU_PLAYING_MY_GAME);

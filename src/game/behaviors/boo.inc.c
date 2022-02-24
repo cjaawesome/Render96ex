@@ -465,7 +465,8 @@ static void boo_act_4(void) {
         obj_mark_for_deletion(o);
 
         if (dialogID == DIALOG_108) { // If the Big Boo should spawn, play the jingle
-            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+            r96_music_fade(0, -1, 0.0, 1, 1);
         }
     }
 }
@@ -764,7 +765,8 @@ void bhv_merry_go_round_boo_manager_loop(void) {
 
                     o->oAction = 2;
 
-                    r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+                    r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+                    r96_music_fade(0, -1, 0.0, 1, 1);
                 }
             }
 
@@ -891,7 +893,8 @@ void bhv_boo_boss_spawned_bridge_loop(void) {
             break;
         case 3:
             if (o->oTimer == 0 && o->oBehParams2ndByte == 1) {
-                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+                r96_music_fade(0, -1, 0.0, 1, 1);
             }
 
             break;

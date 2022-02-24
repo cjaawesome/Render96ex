@@ -17,7 +17,8 @@ static void handle_merry_go_round_music(void) {
             // Play the merry-go-round and BBH music at the same time
             softenVolume = 0.70f;
             softenJingleVolume = 0.40f;
-            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND);
+            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND, 0.1, 1.0, 1500);
+            r96_music_fade(0, -1, 0.0, 2500, 1);
             //play_secondary_music(SEQ_EVENT_MERRY_GO_ROUND, 45, 20, 200);
             // Set to TRUE
             o->oMerryGoRoundMusicShouldPlay++;
@@ -44,7 +45,8 @@ static void handle_merry_go_round_music(void) {
             //play_secondary_music(SEQ_EVENT_MERRY_GO_ROUND, 0, 78, 50);
             softenVolume = 0.0f;
             softenJingleVolume = 1.0f;
-            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND);
+            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND, 0.1, 1.0, 1500);
+            r96_music_fade(0, -1, 0.0, 2500, 1);
             
             gMarioOnMerryGoRound = TRUE;
         } else {
@@ -53,7 +55,8 @@ static void handle_merry_go_round_music(void) {
             //play_secondary_music(SEQ_EVENT_MERRY_GO_ROUND, 45, 20, 200);
             softenVolume = 0.70f;
             softenJingleVolume = 0.40f;
-            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND);
+            r96_play_jingle(R96_EVENT_MERRY_GO_ROUND, 0.1, 1.0, 1500);
+            r96_music_fade(0, -1, 0.0, 2500, 1);
             gMarioOnMerryGoRound = FALSE;
         }
 
@@ -108,7 +111,7 @@ void bhv_merry_go_round_loop(void) {
     } else {
         o->oAngleVelYaw = 0;
         softenVolume = 1.0f;
-        dynos_jingle_stop();
+        r96_stop_jingle();
         //func_80321080(300); // Switch to BBH music? FIXME: Audio needs labelling
     }
 }

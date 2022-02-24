@@ -254,7 +254,7 @@ void handle_save_menu(struct MarioState *m) {
             dialogID = get_star_collection_dialog(m);
             if (dialogID != 0) {
                 softenVolume = 1.0f;
-                r96_play_jingle(R96_EVENT_PEACH_MESSAGE);
+                r96_play_jingle(R96_EVENT_PEACH_MESSAGE, 0.1, 1.0, 1);
                 // look up for dialog
                 set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);
             } else {
@@ -466,8 +466,6 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
             disable_time_stop();
             if (gShouldNotPlayCastleMusic) {
                 gShouldNotPlayCastleMusic = FALSE;
-                r96_play_music(R96_LEVEL_INSIDE_CASTLE_LOBBY);
-                //play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
             }
             if (m->prevAction == ACT_STAR_DANCE_WATER) {
                 set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
@@ -587,12 +585,15 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 spawn_object(m->marioObj, MODEL_STAR, bhvCelebrationStar);
                 disable_background_sound();
                 if (m->actionArg & 1) {
-                    r96_play_jingle(R96_EVENT_STAR_FANFARE);
+                    r96_play_jingle(R96_EVENT_STAR_FANFARE, 0.1, 1.0, 1);
+                    r96_music_fade(1, -1, 0.0, 1, 0);
                 } else {
                     if (gCurrLevelNum == LEVEL_BOWSER_1 || gCurrLevelNum == LEVEL_BOWSER_2) {
-                        r96_play_jingle(R96_EVENT_KEY_COLLECT);
+                        r96_play_jingle(R96_EVENT_KEY_COLLECT, 0.1, 1.0, 1);
+                        r96_music_fade(1, -1, 0.0, 1, 0);
                     } else {
-                        r96_play_jingle(R96_EVENT_STAR_COLLECT);
+                        r96_play_jingle(R96_EVENT_STAR_COLLECT, 0.1, 1.0, 1);
+                        r96_music_fade(1, -1, 0.0, 1, 0);
                     }
                 }
                 break;
@@ -986,7 +987,8 @@ s32 act_character_switch(struct MarioState *m) {
     if(m->actionArg) {
         if(!alreadyPlayed){
             r96_play_character_sound_if_no_flag(m, R96_MARIO_YAHOO, R96_LUIGI_YAHOO, R96_WARIO_YAHOO, MARIO_MARIO_SOUND_PLAYED);
-            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+            r96_music_fade(0, -1, 0.0, 1, 1);
             play_transition(WARP_TRANSITION_FADE_FROM_MARIO, 0x14, 0x00, 0x00, 0x00);
             alreadyPlayed = TRUE;
         }
@@ -1838,7 +1840,7 @@ static void jumbo_star_cutscene_falling(struct MarioState *m) {
 
         if (perform_air_step(m, 1) == AIR_STEP_LANDED) {
             r96_stop_music();
-            r96_play_jingle(R96_EVENT_VICTORY);
+            r96_play_jingle(R96_EVENT_VICTORY, 0.1, 1.0, 1500);
             play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
             m->actionState++;
         }
@@ -2055,7 +2057,7 @@ static void end_peach_cutscene_summon_jumbo_star(struct MarioState *m) {
         m->actionState++;
     }
     if (m->actionTimer == 90) {
-        r96_play_jingle(R96_EVENT_PEACH_ENDING);
+        r96_play_jingle(R96_EVENT_PEACH_ENDING, 0.1, 1.0, 1500);
     }
     if (m->actionTimer == 255) {
         advance_cutscene_step(m);
@@ -2368,7 +2370,7 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
 
         case 140:
             sequence_player_unlower(SEQ_PLAYER_LEVEL, 60);
-            r96_play_jingle(R96_EVENT_CREDITS);
+            r96_play_jingle(R96_EVENT_CREDITS, 0.1, 1.0, 1500);
             break;
 
         case 142:

@@ -58,6 +58,9 @@ void *dynos_geo_get_graph_node(const void *geoLayout, bool keepInMemory) {
 // Musics
 //
 
+void dynos_audio_init() {
+    return DynOS_Audio_Init();
+}
 
 bool dynos_music_load_presets_from_dynos_folder(const char *filename, const char *folder) {
     char filepath[256];
@@ -67,12 +70,12 @@ bool dynos_music_load_presets_from_dynos_folder(const char *filename, const char
     return DynOS_Music_LoadPresets(filepath, wavpath);
 }
 
-void dynos_music_play(const char *name) {
-    return DynOS_Music_Play(name);
+void dynos_music_play(const char *name, float volume_begin, float volume_end, s32 delay_time) {
+    return DynOS_Music_Play(name, volume_begin, volume_end, delay_time);
 }
 
-void dynos_music_multi_play(const char *name) {
-    return DynOS_Music_Multi_Play(name);
+void dynos_music_multi_play(const char *name, float volume_begin, float volume_end, s32 delay_time) {
+    return DynOS_Music_Multi_Play(name, volume_begin, volume_end, delay_time);
 }
 
 void dynos_music_stop() {
@@ -85,6 +88,10 @@ void dynos_music_pause() {
 
 void dynos_music_resume() {
     return DynOS_Music_Resume();
+}
+
+void dynos_music_fade(bool end, float volume_begin, float volume_end, int delay_time) {
+    return DynOS_Music_Fade(end, volume_begin, volume_end, delay_time);
 }
 
 bool dynos_music_is_playing(const char *name) {
@@ -127,8 +134,8 @@ bool dynos_jingle_load_presets_from_dynos_folder(const char *filename, const cha
     return DynOS_Jingle_LoadPresets(filepath, wavpath);
 }
 
-void dynos_jingle_play(const char *name) {
-    return DynOS_Jingle_Play(name);
+void dynos_jingle_play(const char *name, float volume_begin, float volume_end, s32 delay_time) {
+    return DynOS_Jingle_Play(name, volume_begin, volume_end, delay_time);
 }
 
 void dynos_jingle_stop() {
@@ -141,6 +148,10 @@ void dynos_jingle_pause() {
 
 void dynos_jingle_resume() {
     return DynOS_Jingle_Resume();
+}
+
+void dynos_jingle_fade(bool end, float volume_begin, float volume_end, s32 delay_time) {
+    return DynOS_Jingle_Fade(end, volume_begin, volume_end, delay_time);
 }
 
 bool dynos_jingle_is_playing(const char *name) {

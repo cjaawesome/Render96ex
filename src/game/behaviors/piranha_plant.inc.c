@@ -41,8 +41,10 @@ s32 piranha_plant_check_interactions(void) {
     s32 i;
     s32 interacted = 1;
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        if (dynos_jingle_is_playing(R96_EVENT_PIRANHA_PLANT))
-            dynos_jingle_stop();
+        if (dynos_jingle_is_playing(R96_EVENT_PIRANHA_PLANT)) {
+            r96_stop_jingle();
+            r96_music_fade(0, -1, 1.0, 1500, 0);
+        }
 
         if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) {
             cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_DYING);
@@ -99,8 +101,9 @@ void piranha_plant_act_sleeping(void) {
     } else if (o->oDistanceToMario < 650.0f) {
         softenJingleVolume = 1.0f;
     } else if (o->oDistanceToMario < 1000.0f) {
-        r96_play_jingle(R96_EVENT_PIRANHA_PLANT);
+        r96_play_jingle(R96_EVENT_PIRANHA_PLANT, 0.1, 1.0, 1500);
         softenJingleVolume = 0.4f;
+        r96_music_fade(0, -1, 0.0, 2500, 1);
         o->oPiranhaPlantSleepMusicState = PIRANHA_PLANT_SLEEP_MUSIC_PLAYING;
     } else if (o->oPiranhaPlantSleepMusicState == PIRANHA_PLANT_SLEEP_MUSIC_PLAYING) {
         o->oPiranhaPlantSleepMusicState++;
@@ -123,8 +126,10 @@ void piranha_plant_act_woken_up(void) {
     o->oDamageOrCoinValue = 3;
 #endif
     if (o->oTimer == 0)
-        if (dynos_jingle_is_playing(R96_EVENT_PIRANHA_PLANT))
-            dynos_jingle_stop();
+        if (dynos_jingle_is_playing(R96_EVENT_PIRANHA_PLANT)) {
+            r96_stop_jingle();
+            r96_music_fade(0, -1, 1.0, 1500, 0);
+        }
 
     if (piranha_plant_check_interactions() == 0)
         if (o->oTimer > 10)

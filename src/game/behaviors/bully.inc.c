@@ -331,7 +331,8 @@ void bhv_big_bully_with_minions_loop(void) {
             //  the knockback timer is at 3 instead of 0. So the bully knockback time will
             //  be reduced by 3 frames (16.67%) on the first hit.
             if (o->oBullyKBTimerAndMinionKOCounter == 3) {
-                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+                r96_music_fade(0, -1, 0.0, 1, 1);
 
                 if (o->oTimer >= 91)
                     o->oAction = BULLY_ACT_ACTIVATE_AND_FALL;

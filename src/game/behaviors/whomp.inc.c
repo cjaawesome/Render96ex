@@ -26,7 +26,7 @@ void whomp_act_0(void) {
             if (o->oDistanceToMario < 600.0f) {
                 o->oSubAction++;
                 func_8031FFB4(SEQ_PLAYER_LEVEL, 60, 40);
-                r96_play_music(R96_EVENT_BOSS_INTRO);
+                r96_play_music(R96_EVENT_BOSS_INTRO, 0.1, 1.0, 2500);
             } else {
                 cur_obj_set_pos_to_home();
                 o->oHealth = 3;

@@ -375,7 +375,7 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node) {
 }
 
 s32 lvl_star_select() {
-    r96_play_menu_jingle(R96_EVENT_STAR_SELECT);
+    r96_play_menu_jingle(R96_EVENT_STAR_SELECT, 0.1, 1.0, 1500);
 }
 
 /**

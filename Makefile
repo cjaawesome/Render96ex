@@ -61,7 +61,7 @@ AUDIO_API ?= SDL2
 CONTROLLER_API ?= SDL2
 
 BASEDIR ?= res
-BASEPACK ?= base.zip
+BASEPACK ?= based.zip
 
 # Copy assets to BASEDIR? (useful for iterative debugging)
 NO_COPY ?= 0
@@ -161,7 +161,7 @@ ifeq ($(TARGET_RPI),1) # Define RPi to change SDL2 title & GLES2 hints
 endif
 
 ifeq ($(TARGET_SWITCH),1)
-      VERSION_CFLAGS += -DUSE_GLES -DTARGET_SWITCH
+      VERSION_CFLAGS += -DTARGET_SWITCH -DUSE_GLES -DMA_NO_RUNTIME_LINKING -DMA_ENABLE_ONLY_SPECIFIC_BACKENDS -DMA_NO_PTHREAD_IN_HEADER
 endif
 ifeq ($(OSX_BUILD),1) # Modify GFX & SDL2 for OSX GL
      VERSION_CFLAGS += -DOSX_BUILD
@@ -420,24 +420,28 @@ ifeq ($(TARGET_SWITCH),1)
     $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
   endif
   export PATH := $(DEVKITPRO)/devkitA64/bin:$(PATH)
+  include $(DEVKITPRO)/devkitA64/base_tools
+  NXPATH := $(DEVKITPRO)/portlibs/switch/bin
   PORTLIBS ?= $(DEVKITPRO)/portlibs/switch
   LIBNX ?= $(DEVKITPRO)/libnx
   CROSS ?= aarch64-none-elf-
-  SDLCROSS :=
+  SDLCROSS := $(NXPATH)/
   CC := $(CROSS)gcc
   CXX := $(CROSS)g++
   STRIP := $(CROSS)strip
-  NXARCH := -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIC -ftls-model=local-exec
+  NXARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
   APP_TITLE := Render96ex
   APP_AUTHOR := Nintendo, n64decomp team, Render96 team
   APP_VERSION := $(GIT_BRANCH) - $(GIT_HASH)
   APP_ICON := $(CURDIR)/textures/logo/r96-logo.jpg
-  INCLUDE_CFLAGS += -isystem$(LIBNX)/include -I$(PORTLIBS)/include
+  INCLUDE_CFLAGS += -I$(LIBNX)/include -I$(PORTLIBS)/include
   OPT_FLAGS := -O2
+  LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+  export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 endif
 
 # for some reason sdl-config in dka64 is not prefixed, while pkg-config is
-SDLCROSS ?= $(CROSS)
+SDLCROSS ?=
 
 AS := $(CROSS)as
 
@@ -453,8 +457,9 @@ else
   CXX := emcc
 endif
 
-LD := $(CC)
+#LD := $(CC)
 
+LD := $(CXX)
 ifeq ($(DISCORDRPC),1)
   LD := $(CXX)
 else ifeq ($(WINDOWS_BUILD),1)
@@ -622,13 +627,14 @@ else ifeq ($(OSX_BUILD),1)
   LDFLAGS := -lm $(PLATFORM_LDFLAGS) $(BACKEND_LDFLAGS) -lpthread
   
 else ifeq ($(TARGET_SWITCH),1)
-  LDFLAGS := -specs=$(LIBNX)/switch.specs $(NXARCH) $(OPT_FLAGS) -no-pie -L$(LIBNX)/lib $(BACKEND_LDFLAGS) -lstdc++ -lnx -lm
+  LDFLAGS := -specs=$(LIBNX)/switch.specs $(NXARCH) $(OPT_FLAGS) -no-pie -L$(LIBNX)/lib $(BACKEND_LDFLAGS) -lnx -lm ` $(NXPATH)/curl-config --libs`
 
 else
   LDFLAGS := $(BITS) -march=$(TARGET_ARCH) -lm $(BACKEND_LDFLAGS) -no-pie -lpthread
   ifeq ($(DISCORDRPC),1)
     LDFLAGS += -ldl -Wl,-rpath .
   endif
+LDFLAGS += -ldl -Wl,-rpath .
 
 endif # End of LDFLAGS
 

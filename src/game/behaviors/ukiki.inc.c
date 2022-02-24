@@ -409,7 +409,8 @@ void ukiki_act_go_to_cage(void) {
             }
 
             if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+                r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+                r96_music_fade(0, -1, 0.0, 1, 1);
                 cur_obj_init_animation_with_sound(UKIKI_ANIM_JUMP_CLAP);
                 o->oSubAction++;
                 o->oUkikiCageSpinTimer = 32;

@@ -16,7 +16,9 @@
 
 #if FOR_WINDOWS || defined(OSX_BUILD)
 # define GLEW_STATIC
+    #ifndef TARGET_SWITCH
 # include <GL/glew.h>
+    #endif
 #endif
 
 #include <SDL2/SDL.h>
@@ -646,11 +648,13 @@ static void gfx_opengl_start_frame(void) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_SCISSOR_TEST);
+    #ifndef TARGET_SWITCH
     if (Cheats.EnableCheats && Cheats.ChaosWireframe) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+    #endif
 }
 
 static void gfx_opengl_end_frame(void) {

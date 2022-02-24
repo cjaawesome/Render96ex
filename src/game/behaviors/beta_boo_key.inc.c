@@ -46,7 +46,7 @@ void bhv_beta_boo_key_loop(void) {
 		// Delete the object and spawn sparkles
 		obj_mark_for_deletion(o);
 		spawn_object(o, MODEL_SPARKLES, bhvGoldenCoinSparkles);
-        r96_play_collect_jingle(R96_EVENT_COLLECTIBLE_GRAB);
+        r96_play_collect_jingle(R96_EVENT_COLLECTIBLE_GRAB, 0.1, 1.0, 1500);
         //cur_obj_play_sound_2(SOUND_OBJ_BIG_PENGUIN_YELL);
 		gMarioState->numKeys++;
         save_file_register_key(gCurrSaveFileNum - 1, o->oObjectID);
@@ -76,7 +76,7 @@ void bhv_wario_coin_loop(void) {
 		// Delete the object and spawn sparkles
 		obj_mark_for_deletion(o);
 		spawn_object(o, MODEL_SPARKLES, bhvGoldenCoinSparkles);
-        r96_play_collect_jingle(R96_EVENT_COLLECTIBLE_GRAB);
+        r96_play_collect_jingle(R96_EVENT_COLLECTIBLE_GRAB, 0.1, 1.0, 1500);
         //cur_obj_play_sound_2(SOUND_OBJ_BIG_PENGUIN_YELL);
 		gMarioState->numWarioCoins++;
         save_file_register_wario_coin(gCurrSaveFileNum - 1, o->oObjectID);

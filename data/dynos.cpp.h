@@ -655,31 +655,30 @@ void               DynOS_Gfx_GeneratePack                (const SysPath &aPackFo
 //
 // Audio
 //
-
+void               DynOS_Audio_Init                      ();
 void               DynOS_Audio_Mix                       (u8 *aOutput, const u8 *aInput, s32 aLength, f32 aVolume, f32 aDistance);
-bool               DynOS_Music_LoadRaw                   (const String &aName, const u8 *aData, s32 aLength, s32 aLoop, f32 aVolume);
-bool               DynOS_Music_LoadWav                   (const String &aName, const SysPath &aFilename, s32 aLoop, f32 aVolume);
+bool               DynOS_Music_Load                      (const String &aName, const SysPath &aFilename, s32 aLoop, f32 aVolume);
 bool               DynOS_Music_LoadPresets               (const SysPath &aFilename, const SysPath &aFolder);
-void               DynOS_Music_Play                      (const String &aName);
-void               DynOS_Music_Multi_Play                (const String &aName);
+void               DynOS_Music_Play                      (const String &aName, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
+void               DynOS_Music_Multi_Play                (const String &aName, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 void               DynOS_Music_Stop                      ();
 void               DynOS_Music_Pause                     ();
 void               DynOS_Music_Resume                    ();
+void               DynOS_Music_Fade                      (bool aEnd, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 bool               DynOS_Music_IsPlaying                 (const String &aName);
-bool               DynOS_Sound_LoadRaw                   (const String &aName, u8 aBank, const u8 *aData, s32 aLength, f32 aVolume, u8 aPriority);
-bool               DynOS_Sound_LoadWav                   (const String &aName, u8 aBank, const SysPath &aFilename, f32 aVolume, u8 aPriority);
+bool               DynOS_Sound_Load                      (const String &aName, u8 aBank, const SysPath &aFilename, f32 aVolume, u8 aPriority);
 bool               DynOS_Sound_LoadPresets               (const SysPath &aFilename, const SysPath &aFolder);
 void               DynOS_Sound_Play                      (const String &aName, f32 *aPos);
 void               DynOS_Sound_Stop                      (u8 aBank);
 bool               DynOS_Sound_IsPlaying                 (const String &aName);
 bool               DynOS_Sound_IsPlaying                 (u8 aBank);
-bool               DynOS_Jingle_LoadRaw                  (const String &aName, const u8 *aData, s32 aLength, s32 aLoop, f32 aVolume);
-bool               DynOS_Jingle_LoadWav                  (const String &aName, const SysPath &aFilename, s32 aLoop, f32 aVolume);
+bool               DynOS_Jingle_Load                     (const String &aName, const SysPath &aFilename, s32 aLoop, f32 aVolume);
 bool               DynOS_Jingle_LoadPresets              (const SysPath &aFilename, const SysPath &aFolder);
-void               DynOS_Jingle_Play                     (const String &aName);
+void               DynOS_Jingle_Play                     (const String &aName, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 void               DynOS_Jingle_Stop                     ();
 void               DynOS_Jingle_Pause                    ();
 void               DynOS_Jingle_Resume                   ();
+void               DynOS_Jingle_Fade                     (bool aEnd, float aVolumeBegin, float aVolumeEnd, s32 aDelaytime);
 bool               DynOS_Jingle_IsPlaying                (const String &aName);
 
 //

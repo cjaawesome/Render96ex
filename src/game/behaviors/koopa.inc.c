@@ -475,7 +475,7 @@ s32 obj_begin_race(s32 noTimer) {
         cur_obj_play_sound_2(SOUND_GENERAL_RACE_GUN_SHOT);
 
         if (!noTimer) {
-            r96_play_music(R96_EVENT_RACE);
+            r96_play_music(R96_EVENT_RACE, 0.1, 1.0, 2500);
 
             level_control_timer(TIMER_CONTROL_SHOW);
             level_control_timer(TIMER_CONTROL_START);
@@ -830,7 +830,8 @@ void bhv_koopa_race_endpoint_update(void) {
             level_control_timer(TIMER_CONTROL_STOP);
 
             if (!o->oKoopaRaceEndpointKoopaFinished) {
-                r96_play_jingle(R96_EVENT_RACE_FANFARE);
+                r96_play_jingle(R96_EVENT_RACE_FANFARE, 0.1, 1.0, 1500);
+                r96_music_fade(0, -1, 0.0, 2500, 1);
                 if (gMarioShotFromCannon) {
                     o->oKoopaRaceEndpointRaceStatus = -1;
                 } else {

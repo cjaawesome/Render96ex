@@ -2,7 +2,9 @@
 // Everything that should be initialized at the start of the game must be here
 __attribute__((constructor))
 static void r96_system_init() {
-
+    //R96_Effect_Init();
+    dynos_audio_init();
+    dynos_music_stop();
     dynos_music_load_presets_from_dynos_folder("/music.txt", "levels");
     dynos_music_load_presets_from_dynos_folder("/music_other.txt", "jingles");
     dynos_jingle_load_presets_from_dynos_folder("/jingle.txt", "jingles");

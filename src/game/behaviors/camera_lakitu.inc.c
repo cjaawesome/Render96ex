@@ -102,7 +102,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
                 approach_f32_ptr(&o->oCameraLakituCircleRadius, 200.0f, 50.0f);
                 if (o->oDistanceToMario < 1000.0f) {
                     if (!o->oCameraLakituUnk104) {
-                        r96_play_jingle(R96_EVENT_LAKITU_MESSAGE);
+                        r96_play_jingle(R96_EVENT_LAKITU_MESSAGE, 0.1, 1.0, 1500);
                         o->oCameraLakituUnk104 = TRUE;
                     }
 

@@ -1299,32 +1299,23 @@ void check_main_menu_clicked_buttons(void) {
         }
 
         // Play sound of the save file clicked
-        const char *temp;
         switch (sSelectedButtonID) {
-            case MENU_BUTTON_PLAY_FILE_A:
-                temp=menu_sound(0);
-                
-                dynos_sound_play(temp, gDefaultSoundArgs);
+            case MENU_BUTTON_PLAY_FILE_A: 
+                dynos_sound_play(menu_sound(0), gDefaultSoundArgs);
                 // File select to castle grounds
-                r96_jingle_fade_out();
+                r96_jingle_fade(1, -1, 0.0, 2000);
                 break;
             case MENU_BUTTON_PLAY_FILE_B:
-                temp=menu_sound(1);
-
-                dynos_sound_play(temp, gDefaultSoundArgs);
-                r96_jingle_fade_out();
+                dynos_sound_play(menu_sound(1), gDefaultSoundArgs);
+                r96_jingle_fade(1, -1, 0.0, 2000);
                 break;
             case MENU_BUTTON_PLAY_FILE_C:
-                temp=menu_sound(2);
-                
-                dynos_sound_play(temp, gDefaultSoundArgs);
-                r96_jingle_fade_out();
+                dynos_sound_play(menu_sound(2), gDefaultSoundArgs);
+                r96_jingle_fade(1, -1, 0.0, 2000);
                 break;
             case MENU_BUTTON_PLAY_FILE_D:
-                temp=menu_sound(3);
-                
-                dynos_sound_play(temp, gDefaultSoundArgs);
-                r96_jingle_fade_out();
+                dynos_sound_play(menu_sound(3), gDefaultSoundArgs);
+                r96_jingle_fade(1, -1, 0.0, 2000);
                 break;
             // Play sound of the button clicked and render buttons of that menu.
             case MENU_BUTTON_SCORE:
@@ -2363,7 +2354,7 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
 
 s32 lvl_file_select(){
     dynos_music_stop();
-    r96_play_menu_jingle(R96_MENU_FILE_SELECT);
+    r96_play_menu_jingle(R96_MENU_FILE_SELECT, 0.1, 1.0, 1500);
 }
 
 /**

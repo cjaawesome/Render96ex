@@ -504,7 +504,8 @@ void bhv_wooden_post_update(void) {
         // chomp
         o->oWoodenPostOffsetY = -190.0f;
         if (o->parentObj != o) {
-            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+            r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+            r96_music_fade(0, -1, 0.0, 1, 1);
             o->parentObj->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_TRIGGER_CUTSCENE;
             o->parentObj = o;
         }

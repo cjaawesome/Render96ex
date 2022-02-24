@@ -33,7 +33,7 @@ void king_bobomb_act_0(void) {
         o->oHealth = 3;
         if (cur_obj_can_mario_activate_textbox_2(500.0f, 100.0f)) {
             dynos_music_stop();
-            r96_play_music(R96_EVENT_BOSS_INTRO);
+            r96_play_music(R96_EVENT_BOSS_INTRO, 0.1, 1.0, 2500);
             o->oSubAction++;
             func_8031FFB4(SEQ_PLAYER_LEVEL, 60, 40);
         }

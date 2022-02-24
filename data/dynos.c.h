@@ -33,12 +33,14 @@ void *dynos_geo_get_graph_node(const void *geoLayout, bool keepInMemory);
 // Musics
 //
 
+void dynos_audio_init();
 bool dynos_music_load_presets_from_dynos_folder(const char *filename, const char *folder);
-void dynos_music_play(const char *name);
-void dynos_music_multi_play(const char *name);
+void dynos_music_play(const char *name, float volume_begin, float volume_end, int delay_time);
+void dynos_music_multi_play(const char *name, float volume_begin, float volume_end, int delay_time);
 void dynos_music_stop();
 void dynos_music_pause();
 void dynos_music_resume();
+void dynos_music_fade(bool end, float volume_begin, float volume_end, int delay_time);
 bool dynos_music_is_playing(const char *name);
 
 //
@@ -55,10 +57,11 @@ bool dynos_sound_is_playing(const char *name);
 //
 
 bool dynos_jingle_load_presets_from_dynos_folder(const char *filename, const char *folder);
-void dynos_jingle_play(const char *name);
+void dynos_jingle_play(const char *name, float volume_begin, float volume_end, int delay_time);
 void dynos_jingle_stop();
 void dynos_jingle_pause();
 void dynos_jingle_resume();
+void dynos_jingle_fade(bool end, float volume_begin, float volume_end, int delay_time);
 bool dynos_jingle_is_playing(const char *name);
 
 #endif

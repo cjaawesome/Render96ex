@@ -828,6 +828,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 			
         if (!noExit) {
             drop_queued_background_music();
+            r96_music_fade(1, -1, 0.0, 512, 0);
             fadeout_level_music(126);
         }
 
@@ -868,7 +869,6 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
     if (o->oInteractionSubtype & INT_SUBTYPE_FADING_WARP) {
         action = m->action;
-
         if (action == ACT_TELEPORT_FADE_IN) {
             sJustTeleported = TRUE;
 

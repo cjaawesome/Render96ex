@@ -951,14 +951,15 @@ void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
     for (i = 0; i < (s16) ARRAY_COUNT(dialogBossStart); i++) {
         if (dialogBossStart[i] == dialogID) {
             sequence_player_unlower(SEQ_PLAYER_LEVEL, 60);
-            r96_play_music(R96_EVENT_BOSS_THEME);
+            r96_play_music(R96_EVENT_BOSS_THEME, 0.1, 1.0, 2500);
             return;
         }
     }
 
     for (i = 0; i < (s16) ARRAY_COUNT(dialogRaceSound); i++) {
         if (dialogRaceSound[i] == dialogID && gDialogLineNum == 1) {
-            r96_play_jingle(R96_EVENT_RACE_FANFARE);
+            r96_play_jingle(R96_EVENT_RACE_FANFARE, 0.1, 1.0, 1500);
+            r96_music_fade(0, -1, 0.0, 2500, 1);
             return;
         }
     }
@@ -1782,7 +1783,7 @@ void print_hud_course_complete_coins(s16 x, s16 y) {
 
 void play_star_fanfare_and_flash_hud(s32 arg, u8 starNum) {
     if (gHudDisplay.coins == gCourseCompleteCoins && (gCurrCourseStarFlags & starNum) == 0 && gHudFlash == 0) {
-        r96_play_jingle(R96_EVENT_STAR_FANFARE);
+        r96_play_jingle(R96_EVENT_STAR_FANFARE, 0.1, 1.0, 1);
         gHudFlash = arg;
     }
 }
@@ -1950,7 +1951,6 @@ s16 render_menus_and_dialogs() {
                 mode = render_course_complete_screen();
                 break;
         }
-        r96_lower_music();
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     } else if (gDialogID != -1) {
         // The Peach "Dear Mario" message needs to be repositioned separately

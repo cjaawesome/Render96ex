@@ -7042,14 +7042,16 @@ static UNUSED void unused_cutscene_mario_dialog_looking_up(UNUSED struct Camera 
  * Lower the volume (US only) and start the peach letter background music
  */
 BAD_RETURN(s32) cutscene_intro_peach_start_letter_music(UNUSED struct Camera *c) {
-    r96_play_jingle(R96_EVENT_PEACH_MESSAGE);
+    r96_play_jingle(R96_EVENT_PEACH_MESSAGE, 0.1, 1.0, 1);
+    r96_music_fade(1, -1, 0.0, 1, 0);
 }
 
 /**
  * Raise the volume (not in JP) and start the flying music.
  */
 BAD_RETURN(s32) cutscene_intro_peach_start_flying_music(UNUSED struct Camera *c) {
-    r96_play_jingle(R96_EVENT_INTRO);
+    r96_play_jingle(R96_EVENT_INTRO, 0.1, 1.0, 1500);
+    r96_music_fade(1, -1, 0.0, 1, 0);
 }
 
 

@@ -88,7 +88,8 @@ void yoshi_talk_loop(void) {
         }
     } else {
         cur_obj_init_animation(1);
-        r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+        r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+        r96_music_fade(0, -1, 0.0, 1, 1);
         o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x500);
     }
 }

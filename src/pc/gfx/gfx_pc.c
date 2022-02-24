@@ -17,8 +17,10 @@
 #define _LANGUAGE_C
 #endif
 
+#ifndef TARGET_SWITCH
 #define GLEW_STATIC
-#include <GL/glew.h>
+# include <GL/glew.h>
+#endif
 
 #include <PR/gbi.h>
 

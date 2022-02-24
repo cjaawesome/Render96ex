@@ -1976,13 +1976,15 @@ void play_dialog_sound(u8 dialogID) {
         play_sound(sDialogSpeakerVoice[speaker], gDefaultSoundArgs);
         if (speaker == 2) // SOUND_OBJ_BOWSER_INTRO_LAUGH
         {
-            r96_play_jingle(R96_EVENT_KOOPA_MESSAGE);
+            r96_play_jingle(R96_EVENT_KOOPA_MESSAGE, 0.1, 1.0, 1500);
+            r96_music_fade(0, -1, 0.0, 1, 1);
         }
     }
 
     // "You've stepped on the (Wing|Metal|Vanish) Cap Switch"
     if (dialogID == DIALOG_010 || dialogID == DIALOG_011 || dialogID == DIALOG_012) {
-        r96_play_jingle(R96_EVENT_SOLVE_PUZZLE);
+        r96_play_jingle(R96_EVENT_SOLVE_PUZZLE, 0.1, 1.0, 1);
+        r96_music_fade(0, -1, 0.0, 1, 1);
     }
 }
 
