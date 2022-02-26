@@ -408,6 +408,19 @@ TEXTS_COPY_RES := \
 
 TEXTS_BUILD_RES := $(shell $(call TEXTS_COPY_RES))
 
+# Copy SDL2 lib on Windows
+ifeq ($(WINDOWS_BUILD),1)
+  L_BITS := $(shell getconf LONG_BIT)
+  SDL2_IN_LIB_DIR := /mingw$(L_BITS)/bin
+  SDL2_OUT_LIB_DIR := $(BUILD_DIR)
+  SDL2_COPY_LIB := \
+      mkdir -p $(SDL2_IN_LIB_DIR); \
+      mkdir -p $(SDL2_OUT_LIB_DIR); \
+      cp -f $(SDL2_IN_LIB_DIR)/SDL2.dll $(SDL2_OUT_LIB_DIR)/SDL2.dll;
+
+  SDL2_BUILD_BIN := $(shell $(call SDL2_COPY_LIB))
+endif
+
 ##################### Compiler Options #######################
 INCLUDE_CFLAGS := $(PLATFORM_CFLAGS) -I include -I $(BUILD_DIR) -I $(BUILD_DIR)/include -I src -I .
 ENDIAN_BITWIDTH := $(BUILD_DIR)/endian-and-bitwidth
