@@ -4800,7 +4800,7 @@
             "materialMod": {
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/arena_tiles_bake.rgba32"
+            "name": "levels/bowser_1/arena_tiles_diffuse.rgba32"
         },
         {
             "materialMod": {
@@ -4820,7 +4820,7 @@
                 "specularExponent": 2.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/ball_side_1_bake.rgba32",
+            "name": "levels/bowser_1/ball_side_1_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/ball_side_1_normal.rgba32"
             },
@@ -4846,7 +4846,7 @@
                 "specularExponent": 2.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/ball_side_2_bake.rgba32",
+            "name": "levels/bowser_1/ball_side_2_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/ball_side_2_normal.rgba32"
             },
@@ -4870,7 +4870,7 @@
                 "specularExponent": 1.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/center_brick_bake.rgba32",
+            "name": "levels/bowser_1/center_brick_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/center_brick_normal.rgba32"
             },
@@ -4894,7 +4894,7 @@
                 "specularExponent": 1.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/center_concrete_bake.rgba32",
+            "name": "levels/bowser_1/center_concrete_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/center_concrete_normal.rgba32"
             },
@@ -4918,7 +4918,7 @@
                 "specularExponent": 1.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/inner_brick_bake.rgba32",
+            "name": "levels/bowser_1/inner_brick_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/inner_brick_normal.rgba32"
             },
@@ -4942,7 +4942,7 @@
                 "specularExponent": 1.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/inner_concrete_bake.rgba32",
+            "name": "levels/bowser_1/inner_concrete_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/inner_concrete_normal.rgba32"
             },
@@ -4966,7 +4966,7 @@
                 "specularExponent": 4.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/outer_concrete_bake.rgba32",
+            "name": "levels/bowser_1/outer_concrete_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/outer_concrete_normal.rgba32"
             },
@@ -4978,7 +4978,7 @@
             "materialMod": {
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/outer_concrete_more_bake.rgba32",
+            "name": "levels/bowser_1/outer_concrete_more_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/outer_concrete_more_normal.rgba32"
             },
@@ -4990,7 +4990,7 @@
             "materialMod": {
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/outer_concrete_pillar_bake.rgba32",
+            "name": "levels/bowser_1/outer_concrete_pillar_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/outer_concrete_pillar_normal.rgba32"
             },
@@ -5014,7 +5014,7 @@
                 "specularExponent": 4.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/top_concrete_pillar_bake.rgba32",
+            "name": "levels/bowser_1/top_concrete_pillar_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/top_concrete_pillar_normal.rgba32"
             },
@@ -5038,7 +5038,7 @@
                 "specularExponent": 4.0,
                 "uvDetailScale": 1.0
             },
-            "name": "levels/bowser_1/upper_concrete_pillar_bake.rgba32",
+            "name": "levels/bowser_1/upper_concrete_pillar_diffuse.rgba32",
             "normalMapMod": {
                 "name": "levels/bowser_1/upper_concrete_pillar_normal.rgba32"
             },
