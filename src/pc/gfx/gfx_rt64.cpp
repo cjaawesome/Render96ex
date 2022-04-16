@@ -213,6 +213,7 @@ void gfx_rt64_render_thread_preload_shaders() {
 	gfx_rt64_render_thread_preload_shader(0xA00, 0, 1, 2, 2, false, false);
 	gfx_rt64_render_thread_preload_shader(0xA00, 1, 1, 0, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0xA00, 1, 1, 2, 2, false, false);
+	gfx_rt64_render_thread_preload_shader(0xA00, 1, 1, 0, 0, true, false);
 	gfx_rt64_render_thread_preload_shader(0x1045045, 1, 1, 2, 2, true, false);
 	gfx_rt64_render_thread_preload_shader(0x1045045, 1, 1, 2, 2, false, false);
 	gfx_rt64_render_thread_preload_shader(0x1045045, 1, 1, 1, 1, false, false);
@@ -231,6 +232,7 @@ void gfx_rt64_render_thread_preload_shaders() {
 	gfx_rt64_render_thread_preload_shader(0x1200200, 1, 0, 0, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0x1200A00, 1, 1, 2, 2, false, false);
 	gfx_rt64_render_thread_preload_shader(0x1200A00, 0, 1, 2, 2, false, false);
+	gfx_rt64_render_thread_preload_shader(0x1200A00, 1, 1, 0, 0, true, false);
 	gfx_rt64_render_thread_preload_shader(0x120038D, 1, 1, 2, 2, false, false);
 	gfx_rt64_render_thread_preload_shader(0x1200A00, 1, 1, 0, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0x1A00045, 0, 1, 1, 1, false, false);
@@ -252,6 +254,9 @@ void gfx_rt64_render_thread_preload_shaders() {
 	gfx_rt64_render_thread_preload_shader(0x5045045, 1, 1, 2, 2, true, false);
 	gfx_rt64_render_thread_preload_shader(0x5045045, 1, 1, 0, 0, true, false);
 	gfx_rt64_render_thread_preload_shader(0x5200200, 1, 0, 0, 0, false, false);
+	gfx_rt64_render_thread_preload_shader(0x5200045, 1, 1, 0, 0, false, false);
+	gfx_rt64_render_thread_preload_shader(0x5200A00, 1, 1, 0, 0, true, false);
+	gfx_rt64_render_thread_preload_shader(0x5200A00, 1, 1, 0, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0x5A00A00, 1, 1, 2, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0x5A00A00, 0, 1, 0, 0, false, false);
 	gfx_rt64_render_thread_preload_shader(0x5A00A00, 1, 1, 2, 2, false, false);
