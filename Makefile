@@ -689,6 +689,7 @@ all: $(BASEPACK_PATH)
 # phony target for building resources
 res: $(BASEPACK_PATH)
 
+ifneq ($(SKIP_BASEPACK),1)
 # prepares the basepack.lst
 $(BASEPACK_LST): $(EXE)
 	@mkdir -p $(BUILD_DIR)/$(BASEDIR)
@@ -703,13 +704,18 @@ $(BASEPACK_LST): $(EXE)
 	@find textures -name \*.png -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
 	@find db -name \*.* -exec echo "{} {}" >> $(BASEPACK_LST) \;
 ifeq ($(RENDER_API),RT64)
+	@find actors -name \*.dds -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
+	@find levels -name \*.dds -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
+	@find textures -name \*.dds -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
 	@find rt64/textures -name \*.png -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
+	@find rt64/textures -name \*.dds -exec echo "{} gfx/{}" >> $(BASEPACK_LST) \;
 endif
 
 # prepares the resource ZIP with base data
 $(BASEPACK_PATH): $(BASEPACK_LST)
 	@$(PYTHON) $(TOOLS_DIR)/mkzip.py $(BASEPACK_LST) $(BASEPACK_PATH)
   
+endif
 endif
 
 clean:

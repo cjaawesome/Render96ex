@@ -6632,6 +6632,90 @@
         {
             "materialMod": null,
             "name": "textures/water/jrb_textures.0B800.rgba16"
+        },
+		{
+            "name": "levels/bob/TopWalls.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/TopWallsnormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Wood1.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Wood1normal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/SummitGrass.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/SummitGrassNormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/TopWalls.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/TopWallsnormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/DirtPitWalls.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/DirtPitWallsnormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Stone2.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Stone2normal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Wood2.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Wood2normal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Stone1.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Stone1normal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/outterwalls.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/outterwallsnormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Hill_Dirt.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Hill_DirtNormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Dirt_Floor.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Dirt_Floornormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/islandGrass.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/islandGrassnormal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Grass_underisland_.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Grass_underisland_normal.rgba32"
+            }
+        },
+		{
+            "name": "levels/bob/Grass_Flowers.rgba32",
+            "normalMapMod": {
+                "name": "levels/bob/Grass_Flowersnormal.rgba32"
+            }
         }
     ]
 }
