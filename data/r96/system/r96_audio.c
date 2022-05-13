@@ -152,14 +152,14 @@ void r96_stop_shell_music() {
 void r96_play_cap_music(const char* R96_CAP_MUSIC) {
     if (R96_CAP_MUSIC != NULL) {
         dynos_music_stop();
-        dynos_music_play(R96_CAP_MUSIC, 0.1, 1.0, 2500);
+        dynos_music_play(R96_CAP_MUSIC, 1.0, 1.0, 2500);
     }
     sR96CurrentCapMusic = R96_CAP_MUSIC;
 }
 
 void r96_fadeout_cap_music() {
     if (sR96CurrentCapMusic != NULL) {
-        r96_music_fade(1, -1, 0.0, 2000, 0);
+        r96_music_fade(1, -1, 0.0, 2500, 0);
     }
 }
 
@@ -240,15 +240,10 @@ void r96_level_music_update() {
 // When the fanfare is playing and the pause window opens
     if (gMenuMode != -1) {
         softenVolume = 0.20f;
-        softenJingleVolume = 0.20f;
     } 
-    else if (dynos_jingle_is_playing(R96_EVENT_STAR_FANFARE)) {
-        softenJingleVolume = 1.0f;
-        softenVolume = 0.20f;
-    }
+
     else {
         softenVolume = 1.0f;
-        softenJingleVolume = 1.0f;
     }
 
     s32 jukebox = cheats_jukebox(gMarioState);
@@ -310,11 +305,11 @@ void r96_level_music_update() {
                     gCurrLevelNum == LEVEL_WDW ||
                     gCurrLevelNum == LEVEL_HMC ||
                     gCurrLevelNum == LEVEL_BBH)
-                    r96_play_multi_music(music, 0.1, 1.0, 2500);
+                    r96_play_multi_music(music, 1.0, 1.0, 2500);
                 else if (gCurrLevelNum == LEVEL_CASTLE)
                     r96_play_multi_music(music, 1.0, 1.0, 1);
                 else
-                    r96_play_music(music, 0.1, 1.0, 2500);
+                    r96_play_music(music, 1.0, 1.0, 2500);
             }
             // Special Jingle cases
             else if (!dynos_jingle_is_playing(R96_EVENT_MERRY_GO_ROUND) &&

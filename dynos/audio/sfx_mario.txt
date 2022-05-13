@@ -2,7 +2,7 @@
 "mario_wah" MARIO_01 95 1 0x80
 "mario_yah" MARIO_02 95 1 0x80
 "mario_haha" MARIO_03 95 1 0x80
-"mario_yahoo" MARIO_04 95 1 0x80
+"mario_yahoo" MARIO_04 75 1 0x80
 "mario_grunt" MARIO_05 95 1 0x80
 "mario_lift" MARIO_06 95 1 0x80
 "mario_throw" MARIO_07 95 1 0x80
@@ -22,6 +22,6 @@
 "mario_snoring_3" MARIO_15 95 1 0x80
 "mario_so_longa_bowser" MARIO_16 95 1 0x80
 "mario_ima_tired" MARIO_17 95 1 0x80
-"mario_waha" MARIO_18 95 1 0x80
-"mario_yippee" MARIO_19 95 1 0x80
+"mario_waha" MARIO_18 75 1 0x80
+"mario_yippee" MARIO_19 60 1 0x80
 "mario_sound_lets_a_go" MARIO_1A 95 1 0x80

@@ -1676,7 +1676,7 @@ void print_main_menu_strings(void) {
     // Print file names
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_menu_generic_string(MARIOTEXT_X1, 65, get_key_string("TEXT_FILE_MARIO_B"));
+    print_menu_generic_string(MARIOTEXT_X1, 65, get_key_string("TEXT_FILE_MARIO_A"));
     print_menu_generic_string(MARIOTEXT_X2, 65, get_key_string("TEXT_FILE_MARIO_B"));
     print_menu_generic_string(MARIOTEXT_X1, 105, get_key_string("TEXT_FILE_MARIO_C"));
     print_menu_generic_string(MARIOTEXT_X2, 105, get_key_string("TEXT_FILE_MARIO_D"));
@@ -2354,7 +2354,7 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
 
 s32 lvl_file_select(){
     dynos_music_stop();
-    r96_play_menu_jingle(R96_MENU_FILE_SELECT, 0.1, 1.0, 1500);
+    r96_play_menu_jingle(R96_MENU_FILE_SELECT, 1.0, 1.0, 1500);
 }
 
 /**

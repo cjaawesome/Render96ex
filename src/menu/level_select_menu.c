@@ -210,11 +210,11 @@ int intro_play_its_a_me_mario(void) {
 }
 
 s32 lvl_title_theme(){
-    r96_play_menu_jingle(R96_EVENT_TITLE_SCREEN, 0.1, 1.0, 1500);
+    r96_play_menu_jingle(R96_EVENT_TITLE_SCREEN, 1.0, 1.0, 1500);
 }
 
 s32 lvl_gameover_theme(){
-    r96_play_menu_jingle(R96_EVENT_GAME_OVER, 0.1, 1.0, 1500);
+    r96_play_menu_jingle(R96_EVENT_GAME_OVER, 1.0, 1.0, 1500);
 }
 
 

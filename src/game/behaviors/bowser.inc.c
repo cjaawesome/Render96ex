@@ -1,4 +1,7 @@
+#include "data/r96/system/r96_system.h"
+
 // bowser.c.inc
+
 
 void bowser_tail_anchor_act_0(void) {
     struct Object *bowser = o->parentObj;
@@ -813,8 +816,7 @@ s32 bowser_dead_not_bits_end(void) {
         if (cur_obj_update_dialog(2, 18, sBowserDefeatedDialogText[o->oBehParams2ndByte], 0)) {
             o->oBowserUnkF8++;
             cur_obj_play_sound_2(SOUND_GENERAL2_BOWSER_EXPLODE);
-            sequence_player_unlower(SEQ_PLAYER_LEVEL, 60);
-            sequence_player_fade_out(0, 1);
+            r96_music_fade(0, -1, 0.0, 1500, 0);
         }
     } else if (bowser_dead_twirl_into_trophy()) {
         bowser_dead_hide();
@@ -841,8 +843,7 @@ s32 bowser_dead_bits_end(void) {
         }
         if (cur_obj_update_dialog(2, 18, dialogID, 0)) {
             cur_obj_set_model(MODEL_BOWSER2);
-            sequence_player_unlower(SEQ_PLAYER_LEVEL, 60);
-            sequence_player_fade_out(0, 1);
+            r96_music_fade(0, -1, 0.0, 1500, 0);
             bowser_spawn_grand_star_key();
             o->oBowserUnkF8++;
         }
