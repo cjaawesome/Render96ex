@@ -605,6 +605,7 @@ void DynOS_Sound_Play(const String& aName, f32 *aPos) {
 
 void DynOS_Sound_Stop(u8 aBank) {
     if (sPlayingSound != NULL) {
+        ma_sound_seek_to_pcm_frame(&sPlayingSound->mAudio, 0);
         ma_sound_stop(&sPlayingSound->mAudio);
     }
     sPlayingSound = NULL;
