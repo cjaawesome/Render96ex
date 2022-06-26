@@ -396,7 +396,7 @@ void exit_score_file_to_score_menu(struct Object *scoreFileButton, s8 scoreButto
  */
 void render_score_menu_buttons(struct Object *scoreButton) {
     // File A
-    u32 *temp;
+    u32 temp;
     if (save_file_exists(SAVE_FILE_A) == TRUE) {
         s8 currentSave = 0;
         temp = menu_model(currentSave);
@@ -539,7 +539,7 @@ u32 menu_model(s8 currentSave){
 
 void render_copy_menu_buttons(struct Object *copyButton) {
     // File A
-    u32 *temp;
+    u32 temp;
     if (save_file_exists(SAVE_FILE_A) == TRUE) {
         s8 currentSave = 0;
         temp = menu_model(currentSave);
@@ -726,7 +726,7 @@ void check_copy_menu_clicked_buttons(struct Object *copyButton) {
  */
 void render_erase_menu_buttons(struct Object *eraseButton) {
     // File A
-    s32 *temp;
+    u32 temp;
     if (save_file_exists(SAVE_FILE_A) == TRUE) {
         s8 currentSave = 0;
         temp = menu_model(currentSave);
@@ -1177,7 +1177,7 @@ u32 menu_model_fade(s8 currentSave){
 }
 void bhv_menu_button_manager_init(void) {
     // File A
-    s32 *temp;
+    u32 temp;
     if (save_file_exists(SAVE_FILE_A) == TRUE) {
         s8 currentSave = 0;
         temp = menu_model_fade(currentSave);

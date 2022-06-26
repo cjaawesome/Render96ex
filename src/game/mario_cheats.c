@@ -90,24 +90,20 @@ s32 cheats_debug_move(struct MarioState *m) {
 }
 
 s32 cheats_god_mode(struct MarioState *m) {
-#if !defined(OMM_DEFINES_H)
     if (Cheats.EnableCheats && ((Cheats.GodMode && !Cheats.ChaosMode))) {
         m->health = 0x880;
         m->healCounter = 0;
         m->hurtCounter = 0;
         return TRUE;
     }
-#endif
     return FALSE;
 }
 
 s32 cheats_infinite_lives(struct MarioState *m) {
-#if !defined(OMM_DEFINES_H)
     // Always set infinite lives if Chaos mode is enabled
     if (Cheats.EnableCheats && (Cheats.InfiniteLives || Cheats.ChaosMode)) {
         m->numLives = 99;
     }
-#endif
     return FALSE;
 }
 
@@ -246,15 +242,7 @@ s32 cheats_hurt_mario(struct MarioState *m) {
 
                 // 1 HP
                 case 7: {
-#if defined(OMM_DEFINES_H)
-                    if (OMM_MOVESET_ODYSSEY) {
-                        m->health = 0x1FF;
-                    } else {
-                        m->health = 0x180;
-                    }
-#else
-                    m->health = 0x180;
-#endif
+                    m->health = 0x1FF;
                     m->healCounter = 0;
                     m->hurtCounter = 0;
                 } break;
@@ -359,11 +347,6 @@ s32 cheats_super_wing_cap(struct MarioState *m) {
 }
 
 s32 cheats_auto_wall_kick(struct MarioState *m) {
-#if defined(OMM_DEFINES_H)
-    if (OMM_MOVESET_ODYSSEY) {
-        return FALSE;
-    }
-#endif
     if (Cheats.EnableCheats && ((Cheats.AutoWallKick && !Cheats.ChaosMode) || Cheats.ChaosWallKicks)) {
         if (m->action == ACT_AIR_HIT_WALL) {
             m->vel[1] = 52.f;
@@ -580,7 +563,6 @@ s32 cheats_speed_display(struct MarioState *m) {
     return FALSE;
 }
 
-#if !defined(OMM_DEFINES_H)
 static void cheats_play_as_set_model_and_anims(struct MarioState *m, s32 modelId, const void *anim) {
     m->marioObj->header.gfx.sharedChild = gLoadedGraphNodes[modelId];
     if (modelId == MODEL_PLAYER) {
@@ -591,10 +573,8 @@ static void cheats_play_as_set_model_and_anims(struct MarioState *m, s32 modelId
         m->marioObj->header.gfx.curAnim.curAnim = (struct Animation *) anim;
     }
 }
-#endif
 
 s32 cheats_play_as(struct MarioState *m) {
-#if !defined(OMM_DEFINES_H)
     if (Cheats.EnableCheats) {
         s32 playAsIndex;
         if (Cheats.ChaosMode) {
@@ -660,7 +640,6 @@ s32 cheats_play_as(struct MarioState *m) {
             }
         }
     }
-#endif
     return FALSE;
 }
 
@@ -1286,20 +1265,7 @@ s32 cheats_chaos_mode(struct MarioState *m) {
                     // Drain Mario's health by a random amount every frame
                     case CHAOS_LIFE_DRAIN: {
                         if (!insideCastle) {
-#if defined(OMM_DEFINES_H)
-                            if (OMM_MOVESET_ODYSSEY) {
-                                effect->timer += 1 + (random_u16() % 4);
-                                if (effect->timer >= OMM_HEALTH_PER_SEGMENT) {
-                                    effect->timer -= OMM_HEALTH_PER_SEGMENT;
-                                    m->hurtCounter = 1;
-                                    m->healCounter = 0;
-                                }
-                            } else {
-                                m->health -= 1 + (random_u16() % 4);
-                            }
-#else
                             m->health -= 1 + (random_u16() % 4);
-#endif
                         }
                     } break;
 
@@ -1340,11 +1306,7 @@ s32 cheats_chaos_mode(struct MarioState *m) {
                             Cheats.ChaosWallKicks = TRUE;
                         } else {
                             Cheats.ChaosWallKicks = FALSE;
-                            if (
-#if defined(OMM_DEFINES_H)
-                                m->action == ACT_OMM_WALL_SLIDE ||
-#endif                                
-                                m->action == ACT_AIR_HIT_WALL ||
+                            if (m->action == ACT_AIR_HIT_WALL ||
                                 m->action == ACT_WALL_KICK_AIR) {
                                 m->wallKickTimer = 0;
                                 m->vel[1] = min(m->vel[1], 0.f);
@@ -1457,21 +1419,11 @@ s32 cheats_chaos_mode(struct MarioState *m) {
                     // Releasio physics
                     // If forward vel > 15, set it to 200
                     // If B or Z is pressed, set forward vel to -4000
-                    // Force-enable a specific DynOS pack to play as Toad
                     case CHAOS_RELEASIO: {
                         if (gPlayer1Controller->buttonDown & (B_BUTTON | Z_TRIG)) {
                             m->forwardVel = -4000.f;
                         } else if (m->forwardVel > 15.f) {
                             m->forwardVel = 200.f;
-                        }
-                        
-                        // Bup :)
-                        if (effect->duration >= 64) {
-                            dynos_opt_enable_model_pack_by_name("Chaos Releasio", true);
-                        } else if (effect->duration == 0) {
-                            dynos_opt_enable_model_pack_by_name("Chaos Releasio", false);
-                        } else {
-                            dynos_opt_enable_model_pack_by_name("Chaos Releasio", ((1ULL << effect->duration) & sCapFlickerFrames) == 0);
                         }
                     } break;
 

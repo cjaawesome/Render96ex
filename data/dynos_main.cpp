@@ -7,9 +7,6 @@ extern "C" {
 #include "game/object_list_processor.h"
 extern s16 gMenuMode;
 extern s8 gDialogBoxState;
-#ifdef OMM_DEFINES_H
-extern void omm_opt_init();
-#endif
 }
 
 //
@@ -29,9 +26,6 @@ void DynOS_ReturnToMainMenu() {
 //
 
 DYNOS_AT_STARTUP void DynOS_Init() {
-#ifdef OMM_DEFINES_H
-    omm_opt_init();
-#endif
     DynOS_Opt_Init();
 }
 
