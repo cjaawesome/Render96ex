@@ -83,7 +83,11 @@ void sys_fatal(const char *fmt, ...) {
 #ifdef HAVE_SDL2
 
 // we can just ask SDL for most of this shit if we have it
+#ifdef OSX_BUILD
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 // TEMPORARY: check the old save folder and copy contents to the new path
 // this will be removed after a while

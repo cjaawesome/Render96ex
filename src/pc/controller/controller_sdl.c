@@ -5,9 +5,13 @@
 #include <stdbool.h>
 #include <math.h>
 
+#ifdef OSX_BUILD
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
-// Analog camera movement by Pathétique (github.com/vrmiguel), y0shin and Mors
+// Analog camera movement by Path??tique (github.com/vrmiguel), y0shin and Mors
 // Contribute or communicate bugs at github.com/vrmiguel/sm64-analog-camera
 
 #include <ultra64.h>
