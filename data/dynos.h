@@ -10,7 +10,11 @@
 #include <math.h>
 #include <limits.h>
 #include <dirent.h>
+#ifdef OSX_BUILD
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 #ifdef __cplusplus
 #include <new>
 #include <utility>

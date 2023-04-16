@@ -1,7 +1,17 @@
 #include "dynos.cpp.h"
+#ifdef OSX_BUILD
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 extern "C" {
 #include "game/area.h"
+
+#ifdef OSX_BUILD
+// disable CoreAudio on macOS
+#define MA_NO_COREAUDIO
+#endif
+
 #include "r96/r96_miniaudio.h"
 #include "r96/system/r96_system.h"
 }

@@ -1,6 +1,10 @@
 #ifdef AAPI_SDL2
 
+#ifdef OSX_BUILD
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 #include "audio_api.h"
 
