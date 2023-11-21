@@ -6,6 +6,7 @@ float softenVolume = 1.0f;
 float softenJingleVolume = 1.0f;
 
 u32 onShell = 0;
+s8 gShouldNotPlayBowserBoss;
 
 const char* sR96CurrentCapMusic = NULL;
 
@@ -398,7 +399,7 @@ const char *r96_get_intended_level_music() {
     // Inside Castle
     if (gCurrLevelNum == LEVEL_CASTLE) {
         // Stops wing cap from playing inside the castle
-        if(!get_not_play_music()){
+        if(gShouldNotPlayCastleMusic == FALSE){
             if (dynos_music_is_playing(R96_EVENT_CAP_WING) ||
                 dynos_music_is_playing(R96_LEVEL_CASTLE_GROUNDS) ||
                 dynos_music_is_playing(R96_LEVEL_CASTLE_COURTYARD))
@@ -596,16 +597,18 @@ const char *r96_get_intended_level_music() {
         return R96_LEVEL_VCUTM;
 
     // Bowser fight 1
-    if (gCurrLevelNum == LEVEL_BOWSER_1)
-        return R96_LEVEL_BOWSER_1;
+    if(gShouldNotPlayBowserBoss == FALSE){
+        if (gCurrLevelNum == LEVEL_BOWSER_1)
+            return R96_LEVEL_BOWSER_1;
 
-    // Bowser fight 2
-    if (gCurrLevelNum == LEVEL_BOWSER_2)
-        return R96_LEVEL_BOWSER_2;
+        // Bowser fight 2
+        if (gCurrLevelNum == LEVEL_BOWSER_2)
+            return R96_LEVEL_BOWSER_2;
 
-    // Bowser fight 3
-    if (gCurrLevelNum == LEVEL_BOWSER_3)
-        return R96_LEVEL_BOWSER_3;
+        // Bowser fight 3
+        if (gCurrLevelNum == LEVEL_BOWSER_3)
+            return R96_LEVEL_BOWSER_3;
+    }
 
     return NULL;
 }
