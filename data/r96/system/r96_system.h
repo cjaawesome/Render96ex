@@ -6,9 +6,6 @@
 #include "include/types.h"
 
 /* Character Swap */
-
-extern s8 gShouldNotPlayBowserBoss;
-
 void set_notification_status(s8 newState);
 s8 get_notification_status();
 

@@ -168,10 +168,7 @@ s32 sDelayedWarpArg;
 s16 unusedEULevelUpdateBss1;
 #endif
 s8 sTimerRunning;
-
 s8 gShouldNotPlayCastleMusic;
-
-
 
 struct MarioState *gMarioState = &gMarioStates[0];
 u8 unused1[4] = { 0 };
@@ -181,7 +178,9 @@ u8 unused4[2];
 
 
 
-
+s8 get_not_play_music(void){
+    return gShouldNotPlayCastleMusic;
+}
 
 u16 level_control_timer(s32 timerOp) {
     switch (timerOp) {

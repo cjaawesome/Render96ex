@@ -471,7 +471,6 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
                 
                 //play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
             }
-            
             if (m->prevAction == ACT_STAR_DANCE_WATER) {
                 set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
             } else {
