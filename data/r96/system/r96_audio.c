@@ -193,6 +193,8 @@ void r96_play_jingle(const char* R96_JINGLE) {
     }
 }
 
+
+
 void r96_play_collect_jingle(const char* R96_JINGLE) {
     if (!dynos_jingle_is_playing(R96_JINGLE)) {
         softenJingleVolume = 1.0f;
@@ -339,6 +341,7 @@ void r96_level_music_update() {
                 r96_play_multi_music(music);
             else
                 r96_play_music(music);
+
         }
 
         // Special Jingle cases
@@ -351,6 +354,7 @@ void r96_level_music_update() {
             dynos_jingle_is_playing(R96_EVENT_KOOPA_MESSAGE)) {
             r96_jingle_fade_in();
             r96_music_fade_out();
+            
         }
         else if (!dynos_jingle_is_playing(R96_EVENT_MERRY_GO_ROUND) &&
             !dynos_jingle_is_playing(R96_EVENT_STAR_APPEAR)  &&
@@ -394,16 +398,22 @@ const char *r96_get_intended_level_music() {
     // Inside Castle
     if (gCurrLevelNum == LEVEL_CASTLE) {
         // Stops wing cap from playing inside the castle
-        if (dynos_music_is_playing(R96_EVENT_CAP_WING) ||
-            dynos_music_is_playing(R96_LEVEL_CASTLE_GROUNDS) ||
-            dynos_music_is_playing(R96_LEVEL_CASTLE_COURTYARD))
-            r96_stop_music();
-        if (gCurrLevelArea == AREA_CASTLE_LOBBY)
-            return R96_LEVEL_INSIDE_CASTLE_LOBBY;
-        if (gCurrLevelArea == AREA_CASTLE_TIPPY)
-            return R96_LEVEL_INSIDE_CASTLE_TIPPY;
-        if (gCurrLevelArea == AREA_CASTLE_BASEMENT)
-            return R96_LEVEL_INSIDE_CASTLE_BASEMENT;
+        if(!get_not_play_music()){
+            if (dynos_music_is_playing(R96_EVENT_CAP_WING) ||
+                dynos_music_is_playing(R96_LEVEL_CASTLE_GROUNDS) ||
+                dynos_music_is_playing(R96_LEVEL_CASTLE_COURTYARD))
+                r96_stop_music();
+
+            if (gCurrLevelArea == AREA_CASTLE_LOBBY)
+                return R96_LEVEL_INSIDE_CASTLE_LOBBY;
+            if (gCurrLevelArea == AREA_CASTLE_TIPPY)
+                return R96_LEVEL_INSIDE_CASTLE_TIPPY;
+            if (gCurrLevelArea == AREA_CASTLE_BASEMENT)
+                return R96_LEVEL_INSIDE_CASTLE_BASEMENT;
+        }
+        else{
+            return NULL;
+        }
     }
 
     // Castle Courtyard

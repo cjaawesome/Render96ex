@@ -644,6 +644,7 @@ void render_hud_camera_status(void) {
     if (configEnableCamera == false) {
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
     render_hud_tex_lut(get_right(HUD_LAKITU_X), HUD_LAKITU_Y, (*cameraLUT)[GLYPH_CAM_CAMERA]);
+    
 
     switch (sCameraHUD.status & CAM_STATUS_MODE_GROUP) {
         case CAM_STATUS_MARIO:
@@ -719,7 +720,7 @@ void render_hud(void) {
         sPowerMeterVisibleTimer = 0;
     } else {
         create_dl_ortho_matrix();
-
+        
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
             render_hud_cannon_reticle();
         }
