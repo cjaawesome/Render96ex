@@ -1976,9 +1976,7 @@ void play_dialog_sound(u8 dialogID) {
         play_sound(sDialogSpeakerVoice[speaker], gDefaultSoundArgs);
         if (speaker == 2) // SOUND_OBJ_BOWSER_INTRO_LAUGH
         {
-            
             r96_play_jingle(R96_EVENT_KOOPA_MESSAGE);
-            
         }
     }
 

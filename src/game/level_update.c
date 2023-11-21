@@ -176,12 +176,6 @@ s8 D_8032C9E0 = 0;
 u8 unused3[4];
 u8 unused4[2];
 
-
-
-s8 get_not_play_music(void){
-    return gShouldNotPlayCastleMusic;
-}
-
 u16 level_control_timer(s32 timerOp) {
     switch (timerOp) {
         case TIMER_CONTROL_SHOW:
@@ -1142,10 +1136,7 @@ static s32 play_mode_unused(void) {
 
 s32 update_level(void) {
     s32 changeLevel;
-    s32 gCurrLevelArea = gCurrLevelNum * 16 + gCurrentArea->index;
-    
     r96_level_music_update();
-    
     switch (sCurrPlayMode) {
         case PLAY_MODE_NORMAL:
             changeLevel = play_mode_normal();
